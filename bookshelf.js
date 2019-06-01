@@ -1,6 +1,6 @@
-class Crate extends Obstacle{
+class Bookshelf extends Obstacle{
 	constructor(xPos, yPos){
-		this.width = 192;
+		this.width = 64;
 		this.height = 192;
 		this.xPos = xPos;
 		this.yPos = yPos;
