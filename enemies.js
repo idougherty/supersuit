@@ -21,7 +21,7 @@ class Guns extends Enemy
 {
 	constructor(xPos, yPos)
 	{
-		super(xPosit, yPosit);
+		super(xPos, yPos);
 		this.texture = "";
 	}
 }
@@ -30,7 +30,7 @@ class Cracheads extends Enemy
 {
 	constructor(xPos, yPos)
 	{
-		super(xPosit, yPosit);
+		super(xPos, yPos);
 		this.texture = "";
 	}
 }
