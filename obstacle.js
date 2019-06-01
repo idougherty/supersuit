@@ -1,4 +1,4 @@
-abstract class Obstacle{
+class Obstacle{
 	constructor(){
 		this.width = w;
 		this.height = h;
@@ -6,8 +6,4 @@ abstract class Obstacle{
 		this.yPos = y;
 		this.texture = t;
 	}
-}
-
-function draw(){
-	
 }
