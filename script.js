@@ -156,7 +156,7 @@ class Gamestate {
   }
   update() {
     this.speed =
-      1200 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 1);
+      120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 1);
     console.log(game.speed);
   }
   loop() {
@@ -167,7 +167,7 @@ class Gamestate {
     player.draw();
 
     game.update();
-    setTimeout(game.loop, 30);
+    setTimeout(game.loop, game.speed);
   }
 }
 
