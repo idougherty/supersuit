@@ -23,10 +23,6 @@ function Particle(x, y) {
 	}
 }
 
-function Gamestate() {
-	this
-}
-
 function Player() {
 	this.x = canvas.width/2;
 	this.y = canvas.height/2;
@@ -67,26 +63,32 @@ function Player() {
 	this.left = function() {
 		if(this.vx > -4) {
 			this.vx -= 1;
+		} else {
+			this.vx = -4;
 		}
 	};
 	this.right = function() {
 		if(this.vx < 4) {
 			this.vx += 1;
+		} else {
+			this.vx = 4;
 		}
 	};
 	this.up = function() {
 		if(this.vy > -4) {
 			this.vy -= 1;
+		} else {
+			this.vy = -4;
 		}
 	};
 	this.down = function() {
 		if(this.vy < 4) {
 			this.vy += 1;
+		} else {
+			this.vy = 4;
 		}
 	};
 }
-
-player = new Player();
 
 document.addEventListener("keydown", function(e) {
 	switch (e.keyCode) {
@@ -134,10 +136,25 @@ document.addEventListener("keyup", function(e) {
 	}
 });
 
-setInterval(function() {
-	c.fillStyle = "black";
-	c.fillRect(0, 0, canvas.width, canvas.height);
-	
-	player.update();
-	player.draw();
-}, 30);
+game = new Gamestate();
+player = new Player();
+
+function Gamestate() {
+	this.speed = 1;
+	this.update = function() {
+		this.speed = 1200/(Math.sqrt(player.vx*player.vx+player.vy*player.vy)+1);
+		console.log(game.speed);
+	}
+	this.loop = function() {		
+		c.fillStyle = "black";
+		c.fillRect(0, 0, canvas.width, canvas.height);
+		
+		player.update();
+		player.draw();
+		
+		game.update();
+		setTimeout(game.loop, 30);
+	}
+}
+
+game.loop();
