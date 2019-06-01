@@ -50,9 +50,6 @@ class Player {
     }
 
     update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
         if (this.keydown.LEFT && !this.keydown.RIGHT) {
             this.left();
         } else if (this.keydown.RIGHT && !this.keydown.LEFT) {
@@ -68,6 +65,9 @@ class Player {
         } else {
             this.vy *= 0.7;
         }
+
+        this.x += this.vx;
+        this.y += this.vy;
     }
 
     left() {
@@ -122,7 +122,9 @@ document.addEventListener("keydown", function(e) {
             break;
 
         default:
+            return;
     }
+    game.update();
 });
 
 document.addEventListener("keyup", function(e) {
@@ -156,14 +158,13 @@ class Gamestate {
             120 /
             (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 1);
         console.log(game.speed);
-    }
-    loop() {
         c.fillStyle = "black";
         c.fillRect(0, 0, canvas.width, canvas.height);
 
         player.update();
         player.draw();
-
+    }
+    loop() {
         game.update();
         setTimeout(game.loop, game.speed);
     }
