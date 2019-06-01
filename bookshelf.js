@@ -1,5 +1,5 @@
 class Bookshelf extends Obstacle{
-	constructor(xPos, yPs){
+	constructor(xPos, yPos){
 		this.width = 192;
 		this.height = 64;
 		this.xPos = xPos;
@@ -8,7 +8,7 @@ class Bookshelf extends Obstacle{
 	}
 	
 	draw(){
-		c.fillStyle "#brown"
+		c.fillStyle = "brown"
 		c.fillRect(this.xPos, this.yPos, this.width, this.height);
 	}
 }

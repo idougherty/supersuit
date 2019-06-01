@@ -8,7 +8,7 @@ class FireBarrel extends Obstacle{
 	}
 	
 	draw(){
-		c.fillStyle "#orange"
+		c.fillStyle = "orange"
 		c.fillRect(this.xPos, this.yPos, this.width, this.height);
 	}
 }

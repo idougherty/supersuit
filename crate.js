@@ -8,7 +8,7 @@ class Crate extends Obstacle{
 	}
 	
 	draw(){
-		c.fillStyle "#bd9647"
+		c.fillStyle = "#bd9647"
 		c.fillRect(this.xPos, this.yPos, this.width, this.height);
 	}
 }

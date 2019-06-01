@@ -8,7 +8,7 @@ class Wall extends Obstacle{
 	}
 	
 	draw(){
-		c.fillStyle "#999"
+		c.fillStyle = "#999999"
 		c.fillRect(this.xPos, this.yPos, this.width, this.height);
 	}
 }
