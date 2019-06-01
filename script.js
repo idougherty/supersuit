@@ -32,6 +32,8 @@ class Player {
     this.vy = 0;
     this.width = 20;
     this.height = 20;
+    this.weapon = "fist";
+    
     this.keydown = {
       LEFT: false,
       RIGHT: false,
