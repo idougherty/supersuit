@@ -1,6 +1,6 @@
 class Bookshelf extends Obstacle{
 	constructor(xPos, yPos){
-		this.width = 192;
+		this.width = 256;
 		this.height = 64;
 		this.xPos = xPos;
 		this.yPos = yPos;
