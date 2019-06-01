@@ -147,9 +147,6 @@ document.addEventListener("keyup", function(e) {
     }
 });
 
-game = new Gamestate();
-player = new Player();
-
 class Gamestate {
     constructor() {
         this.speed = 1;
@@ -171,5 +168,8 @@ class Gamestate {
         setTimeout(game.loop, game.speed);
     }
 }
+
+game = new Gamestate();
+player = new Player();
 
 game.loop();
