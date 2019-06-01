@@ -8,8 +8,7 @@ class Particle {
         this.x = x;
         this.y = y;
 
-        this.vx = 5 * Math.random() - 2.5;
-        this.vy = 5 * Math.random() - 2.5;
+        this.vy = 2.5;
         this.size = 5;
         this.color =
             "rgba(" + (Math.floor(Math.random() * 100) + 155) + ", 50, 30, 1)";
@@ -18,12 +17,7 @@ class Particle {
     run() {
         c.fillStyle = this.color;
         c.fillRect(this.x, this.y, this.size, this.size);
-
-        this.vx *= 0.98;
-        this.vx *= 0.98;
-
-        this.size -= 0.1;
-        this.x += this.vx;
+		
         this.y += this.vy;
     }
 }
@@ -147,6 +141,8 @@ document.addEventListener("keyup", function(e) {
     }
 });
 
+p.push(new Particle(200, 0));
+
 class Gamestate {
     constructor() {
         this.speed = 1;
@@ -154,8 +150,7 @@ class Gamestate {
     update() {
         this.speed =
             120 /
-            (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 1);
-        console.log(game.speed);
+            (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + .5);
     }
     loop() {
         c.fillStyle = "black";
@@ -163,6 +158,8 @@ class Gamestate {
 
         player.update();
         player.draw();
+		
+		p[0].run();
 
         game.update();
         setTimeout(game.loop, game.speed);
