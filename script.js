@@ -16,10 +16,11 @@ class Particle {
       "rgba(" + (Math.floor(Math.random() * 100) + 155) + ", 50, 30, 1)";
   }
 
-  run() {
+  draw(c) {
     c.fillStyle = this.color;
     c.fillRect(this.x, this.y, this.size, this.size);
-
+  }
+  update() {
     this.y += this.vy;
   }
 }
@@ -145,6 +146,41 @@ document.addEventListener("keyup", function(e) {
   }
 });
 
+window.mouseX = 0;
+window.mouseY = 0;
+
+canvas.addEventListener("mousemove", event => {
+  mouseX = event.offsetX;
+  mouseY = event.offsetY;
+});
+
+function drawCursor(c) {
+  c.beginPath();
+  c.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
+  c.fillStyle = "#da1001";
+  c.fill();
+}
+
+function draw() {
+  c.fillStyle = "black";
+  c.fillRect(0, 0, canvas.width, canvas.height);
+
+  player.draw(c);
+  for (const enemy of game.enemies) {
+    enemy.draw(c);
+  }
+
+  for (const particle of p) {
+    particle.update(c);
+  }
+
+  drawCursor(c);
+
+  requestAnimationFrame(draw);
+}
+
+requestAnimationFrame(draw);
+
 p.push(new Particle(200, 0));
 
 class Gamestate {
@@ -155,20 +191,15 @@ class Gamestate {
   update() {
     this.speed =
       120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
-    console.log(game.speed);
-    c.fillStyle = "black";
-    c.fillRect(0, 0, canvas.width, canvas.height);
 
     player.update();
-    player.draw();
 
     for (const enemy of this.enemies) {
       enemy.update();
-      enemy.draw(c);
     }
 
     for (const particle of p) {
-      particle.run();
+      particle.update();
     }
   }
   loop() {
