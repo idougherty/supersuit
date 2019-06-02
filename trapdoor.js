@@ -7,8 +7,8 @@ export class Trapdoor {
     this.height = TILE_SIZE;
     this.width = TILE_SIZE;
     this.open = false;
-    this.texture1 = document.getElement("trapdoorO");
-    this.texture2 = document.getElement("trapdoorC");
+    this.texture1 = document.getElementById("trapdoorO");
+    this.texture2 = document.getElementById("trapdoorC");
   }
 
   draw(c) {
