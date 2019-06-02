@@ -319,12 +319,12 @@ function drawCursor(c) {
   //c.arc(cursorX, cursorY, 5, 0, Math.PI * 2);
   //c.fillStyle = "#da1001";
   //c.fill();
-  if(player.punchCoolDown > 20) {
+  if (player.punchCoolDown > 20) {
     c.globalAlpha = 1;
   } else {
     c.globalAlpha = 0.4;
   }
-  c.drawImage(fist, cursorX-6, cursorY-6, 12, 12);
+  c.drawImage(fist, cursorX - 6, cursorY - 6, 12, 12);
   c.globalAlpha = 1;
 }
 
@@ -353,8 +353,6 @@ function draw() {
 
   requestAnimationFrame(draw);
 }
-
-requestAnimationFrame(draw);
 
 class Gamestate {
   constructor() {
@@ -427,7 +425,6 @@ window.player = player;
 
 game.weapons.push(new Weapon(64, 64, true));
 
-game.loop();
 game.levels.push(
   [
     ["h", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
@@ -520,4 +517,22 @@ game.levels.push(
   ]
 );
 
-player.respawn();
+c.drawImage(document.getElementById("title"), 0, 0, canvas.width, canvas.height);
+let startImage = "title"
+canvas.addEventListener("click", function listener() {
+  switch (startImage) {
+    case "title":
+      startImage = "explain";
+      c.drawImage(document.getElementById("explain"), 0, 0, canvas.width, canvas.height);
+      break
+    case "explain":
+      canvas.removeEventListener("click",listener)
+      startGame();
+      break
+  }
+})
+function startGame() {
+  requestAnimationFrame(draw);
+  game.loop();
+  player.respawn();
+}
