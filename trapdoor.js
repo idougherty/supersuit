@@ -9,7 +9,7 @@ export class Trapdoor {
   }
 
   draw(c) {
-    //c.fillStyle = "green";
-    //c.fillRect(this.x, this.y, this.width, this.height);
+    c.fillStyle = "green";
+    c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
