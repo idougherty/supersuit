@@ -1,6 +1,4 @@
-import { Obstacle } from "./obstacle.js";
-
-export class Crate extends Obstacle {
+export class Crate {
   constructor(xPos, yPos) {
     this.width = 192;
     this.height = 192;
