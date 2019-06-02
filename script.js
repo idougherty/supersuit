@@ -48,7 +48,7 @@ class Player {
       DOWN: false
     };
   }
-
+//owo
   draw() {
     c.fillStyle = "white";
     c.fillRect(this.x, this.y, this.width, this.height);
@@ -111,7 +111,7 @@ class Player {
       this.vx = 4;
     }
   }
-
+//iwi
   up() {
     if (this.vy > -4) {
       this.vy -= 1;
@@ -129,7 +129,7 @@ class Player {
   }
 <<<<<<< HEAD
   
-  
+  //uwu
   punch(vector) {
 =======
 
@@ -217,7 +217,7 @@ document.addEventListener("keyup", function(e) {
     default:
   }
 });
-
+//owo
 let cursorX = 0;
 let cursorY = 0;
 
@@ -240,7 +240,7 @@ function calculateCursorCoords() {
 
 let mouseX = 0;
 let mouseY = 0;
-
+//WwW
 canvas.addEventListener("mousemove", event => {
   mouseX = event.offsetX;
   mouseY = event.offsetY;
@@ -344,7 +344,7 @@ class Gamestate {
     setTimeout(game.loop, game.speed);
   }
 }
-
+//uwu
 const game = new Gamestate();
 const player = new Player();
 

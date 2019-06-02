@@ -8,7 +8,7 @@ export class Enemy {
     this.radius = 16;
     this.texture = "";
   }
-
+//VwV
   update() {}
 
   draw(c) {
