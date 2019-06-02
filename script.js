@@ -21,6 +21,8 @@ var c = canvas.getContext("2d");
 
 c.imageSmoothingEnabled = false;
 
+let win = false;
+
 class Player {
   constructor() {
     this.x = canvas.width / 3;
@@ -80,8 +82,13 @@ class Player {
         }
         if (obs.open && isCollidingRectEntities(player, obs)) {
           game.currentLevel++;
+          if (game.currentLevel > game.levels.length - 1) {
+            win = true;
+            return;
+          }
           game.newObstacles(game.levels[game.currentLevel]);
           this.respawn();
+          return;
         }
       }
     }
@@ -331,6 +338,17 @@ function drawCursor(c) {
 }
 
 function draw() {
+  if (win) {
+    c.drawImage(
+      document.getElementById("endscreen"),
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+    return;
+  }
+
   player.update();
 
   game.speed =
@@ -421,6 +439,7 @@ class Gamestate {
     }
   }
   loop() {
+    if (win) return;
     game.update();
     setTimeout(game.loop, game.speed);
   }
