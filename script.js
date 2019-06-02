@@ -107,18 +107,24 @@ class Player {
 
   punch(vector) {}
 
-  shoot(vector) {
-    
-  }
+  shoot(vector) {}
+}
+
+function playerCenter() {
+  return [player.x + player.width / 2, player.y + player.height / 2];
+}
+
+function calculateVector(x1, y1, x2, y2) {
+  const xDist = x2 - x1;
+  const yDist = y2 - y1;
+  const ratio = 1 / Math.sqrt(xDist ** 2 + yDist ** 2);
+  return [xDist * ratio, yDist * ratio];
 }
 
 canvas.addEventListener("click", function(e) {
-  const xDist = player.x + player.width / 2 - e.layerX;
-  const yDist = player.y + player.height / 2 - e.layerY;
-  const ratio = 1 / Math.sqrt(xDist * xDist + yDist * yDist);
-  const vector = [xDist * ratio, yDist * ratio];
- 
-  if(player.weapon = "fist") {
+  if (player.weapon === "fist") {
+    const [playerX, playerY] = playerCenter();
+    const vector = calculateVector(playerX, playerY, e.layerX, e.layerY);
     player.punch(vector);
   } else {
     player.shoot(vector);
@@ -171,17 +177,30 @@ document.addEventListener("keyup", function(e) {
   }
 });
 
-window.mouseX = 0;
-window.mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
 
 canvas.addEventListener("mousemove", event => {
-  mouseX = event.offsetX;
-  mouseY = event.offsetY;
+  if (player.weapon === "fist") {
+    const [playerX, playerY] = playerCenter();
+    const xDist = event.offsetX - playerX;
+    const yDist = event.offsetY - playerY;
+    const distance = Math.sqrt(xDist ** 2 + yDist ** 2);
+    if (distance > 64) {
+      const ratio = 64 / distance;
+      cursorX = playerX + xDist * ratio;
+      cursorY = playerY + yDist * ratio;
+      return;
+    }
+  }
+  cursorX = event.offsetX;
+  cursorY = event.offsetY;
 });
 
+/** @param {CanvasRenderingContext2D} c */
 function drawCursor(c) {
   c.beginPath();
-  c.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
+  c.arc(cursorX, cursorY, 5, 0, Math.PI * 2);
   c.fillStyle = "#da1001";
   c.fill();
 }
@@ -220,7 +239,7 @@ class Gamestate {
   }
   newObstacles(layout) {
     this.obstacles = [];
-    
+
     for (let y = 0; y < layout.length; y++) {
       for (let x = 0; x < layout.length; x++) {
         switch (layout[y][x]) {
@@ -268,13 +287,15 @@ class Gamestate {
 
 window.game = new Gamestate();
 window.player = new Player();
-game.newObstacles([[" ", " ", " ", " ", "w", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  ["c", " ", " ", " ", " ", " ", "f", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", "b", " ", " ", " ", ],]);
+game.newObstacles([
+  [" ", " ", " ", " ", "w", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  ["c", " ", " ", " ", " ", " ", "f", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", "b", " ", " ", " "]
+]);
 
 game.loop();

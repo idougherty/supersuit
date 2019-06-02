@@ -9,6 +9,6 @@ export class Bookshelf {
 
   draw(c) {
     c.fillStyle = "brown";
-    c.fillRect(this.xPos, this.yPos, this.width, this.height);
+    c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
