@@ -10,7 +10,7 @@ export class Wall {
   }
 
   draw(c) {
-    c.fillStyle = "#999999";
+    c.fillStyle = "#999";
     c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
