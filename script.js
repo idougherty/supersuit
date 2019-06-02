@@ -54,7 +54,15 @@ class Player {
   }
   
   calculateCollisions() {
-    
+    if(this.weapon != "gun") {
+      for(int i = 0; i < Gamestate.weapons.size(); i++){
+        if(this.collision == Gamestate.weapons[i]){
+          this.weapon = Gamestate.weapons[i];
+          Gamestate.weapons.splice(i, 1);
+          break;
+        }
+      }
+    }
   }
   
   update() {
@@ -112,8 +120,10 @@ class Player {
       this.vy = 4;
     }
   }
-
-  punch(vector) {}
+  
+  
+  punch(vector) {
+  }
 
   shoot(vector) {}
 }
