@@ -244,6 +244,21 @@ class Gamestate {
       }
     }
   }
+
+  isCollidingCircle(x1, y1, r1, x2, y2, r2)
+  {
+    z = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+    if(z <= r1 + r2)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+  }
+
   update() {
     this.speed =
       120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
