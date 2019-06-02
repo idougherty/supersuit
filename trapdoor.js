@@ -12,13 +12,10 @@ export class Trapdoor {
   }
 
   draw(c) {
-    if(open) {
+    if (this.open) {
       c.drawImage(this.texture1, this.x, this.y, this.height, this.width);
-    }
-    else {
+    } else {
       c.drawImage(this.texture2, this.x, this.y, this.height, this.width);
     }
-    //c.fillStyle = "green";
-    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
