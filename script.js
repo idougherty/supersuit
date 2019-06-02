@@ -112,8 +112,8 @@ class Player {
 canvas.addEventListener("click", function(e) {
   const xDist = player.x + player.width/2 - e.layerX;
   const yDist = player.y + player.height/2 - e.layerY;
-  const ratio = 1/Math.sqrt(xDist*xDist, yDist*yDist);
-  const vector = [xDist*ratio, rDist*ratio];
+  const ratio = 1/Math.sqrt(xDist*xDist + yDist*yDist);
+  const vector = [xDist*ratio, yDist*ratio];
   
   // console.log(vector);
   // if(player.weapon = "fist") {
