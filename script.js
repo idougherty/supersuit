@@ -1,4 +1,4 @@
-import { Crachead } from "./enemies.js";
+import { Crachead, GuyThatShootsYou } from "./enemies.js";
 import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
@@ -12,6 +12,7 @@ import {
 import { Weapon } from "./weapon.js";
 import { Bullet } from "./bullet.js";
 import { TILE_SIZE } from "./constants.js";
+import { Trapdoor } from "./trapdoor.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -74,6 +75,12 @@ class Player {
         return shouldPickUp;
       });
     }
+    
+    for(const obs of game.obstacles) {
+      if(obs instanceof Trapdoor && obs.open && isCollidingRectEntities(player, obs)) {
+        
+      }
+    }
   }
 
   update() {
@@ -105,7 +112,7 @@ class Player {
     this.x += this.vx;
 
     for (const obs of game.obstacles) {
-      if (typeof obs != "trapdoor" && isCollidingRectEntities(player, obs)) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(player, obs)) {
         this.x -= this.vx;
         this.vx = 0;
       }
@@ -114,7 +121,7 @@ class Player {
     this.y += this.vy;
 
     for (const obs of game.obstacles) {
-      if (typeof obs != "trapdoor" && isCollidingRectEntities(player, obs)) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(player, obs)) {
         this.y -= this.vy;
         this.vy = 0;
       }
@@ -290,10 +297,13 @@ function draw() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
 
+  for (const obs of game.obstacles) {
+    obs.draw(c);
+  }
+    
   player.draw(c);
 
   for (const entity of [
-    ...game.obstacles,
     ...game.enemies,
     ...game.weapons,
     ...game.bullets
@@ -329,7 +339,10 @@ class Gamestate {
           c: Crate,
           b: Bookshelf,
           f: FireBarrel,
-          w: Wall
+          w: Wall,
+          t: Trapdoor,
+          h: Crachead,
+          g: GuyThatShootsYou,
         };
         if (obstacle in obstacles) {
           this.obstacles.push(
@@ -369,7 +382,7 @@ game.newObstacles([
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", " ", " "],
+  ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", "t", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],

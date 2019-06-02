@@ -1,6 +1,6 @@
 import { TILE_SIZE } from "./constants.js";
 
-class Trapdoor {
+export class Trapdoor {
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -9,7 +9,7 @@ class Trapdoor {
     this.open = false;
   }
 
-  draw() {
+  draw(c) {
     c.fillStyle = "green";
     c.fillRect(this.x, this.y, this.width, this.height);
   }
