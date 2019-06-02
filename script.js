@@ -55,6 +55,7 @@ class Player {
     this.weapon = "fist";
     this.maxSpeed = 4;
     this.punchCoolDown = 0;
+    this.texture = document.getElementById("frozoefront");
 
     this.keydown = {
       LEFT: false,
@@ -65,8 +66,9 @@ class Player {
   }
   //owo
   draw() {
-    c.fillStyle = "white";
-    c.fillRect(this.x, this.y, this.width, this.height);
+    c.drawImage(this.texture, this.x, this.y, this.width, this.height);
+    //c.fillStyle = "white";
+    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 
   respawn() {
@@ -176,6 +178,7 @@ class Player {
     } else {
       this.vx = -this.maxSpeed;
     }
+    this.texture = document.getElementById("left");
   }
 
   right() {
@@ -184,6 +187,7 @@ class Player {
     } else {
       this.vx = this.maxSpeed;
     }
+    this.texture = document.getElementById("right");
   }
   //iwi
   up() {
@@ -192,6 +196,7 @@ class Player {
     } else {
       this.vy = -this.maxSpeed;
     }
+    this.texture = document.getElementById("back");
   }
 
   down() {
@@ -200,6 +205,7 @@ class Player {
     } else {
       this.vy = this.maxSpeed;
     }
+    this.texture = document.getElementById("frontwalk");
   }
   //uwu
 
