@@ -12,7 +12,7 @@ export class Bullet {
     this.width = 4;
     this.height = 4;
     this.vector = vector;
-    this.speed = 3;
+    this.speed = 5;
     this.tag = tag;
   }
 
