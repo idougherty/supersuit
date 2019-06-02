@@ -6,15 +6,11 @@ export class Weapon {
     this.height = 16;
     this.width = 16;
     this.radius = 8;
+    this.texture = document.getElementById("gun");
     this.weapon = weapon;
   }
 
   draw(c) {
-    if(this.loaded) {
-      c.globalAlpha = 1;
-    } else {
-      c.globalAlpha = 0.4;
-    }
     c.fillStyle = "blue";
     c.beginPath();
     c.arc(
@@ -25,6 +21,10 @@ export class Weapon {
       2 * Math.PI
     );
     c.fill();
-    c.globalAlpha = 1;
+    c.drawImage(this.texture, this.x, this.y);
+    if(this.loaded) {
+      c.fillStyle = "rgba(0, 0, 0, .5)";
+      c.fillRect(cursorX-6, cursorY-6, 12, 12);
+    }
   }
 }
