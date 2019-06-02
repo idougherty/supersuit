@@ -19,29 +19,6 @@ var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
 
 c.imageSmoothingEnabled = false;
-c.mozImageSmoothingEnabled = false;
-
-var p = [];
-
-class Particle {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-
-    this.vy = 2.5;
-    this.size = 5;
-    this.color =
-      "rgba(" + (Math.floor(Math.random() * 100) + 155) + ", 50, 30, 1)";
-  }
-
-  draw(c) {
-    c.fillStyle = this.color;
-    c.fillRect(this.x, this.y, this.size, this.size);
-  }
-  update() {
-    this.y += this.vy;
-  }
-}
 
 class Player {
   constructor() {
@@ -72,6 +49,7 @@ class Player {
     game.enemies = [];
     game.weapons = [];
     game.bullets = [];
+    game.particles = [];
     game.newObstacles(game.levels[game.currentLevel]);
     this.x = game.entranceX;
     this.y = game.entranceY;
@@ -344,7 +322,8 @@ function draw() {
     ...game.obstacles,
     ...game.weapons,
     ...game.enemies,
-    ...game.bullets
+    ...game.bullets,
+    ...game.particles
   ]) {
     entity.draw(c);
   }
@@ -358,8 +337,6 @@ function draw() {
 
 requestAnimationFrame(draw);
 
-p.push(new Particle(200, 0));
-
 class Gamestate {
   constructor() {
     this.speed = 1;
@@ -368,6 +345,7 @@ class Gamestate {
     this.obstacles = [];
     this.weapons = [];
     this.bullets = [];
+    this.particles = [];
     this.levels = [];
     this.entranceX = 0;
     this.entranceY = 0;
@@ -408,12 +386,12 @@ class Gamestate {
   }
 
   update() {
-    for (const entity of [...this.enemies, ...this.bullets]) {
+    for (const entity of [
+      ...this.enemies,
+      ...this.bullets,
+      ...this.particles
+    ]) {
       entity.update(player, game);
-    }
-
-    for (const particle of p) {
-      particle.update();
     }
   }
   loop() {
