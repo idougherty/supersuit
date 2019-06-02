@@ -66,10 +66,10 @@ class Player {
           weapon.y,
           weapon.radius
         );
-        if (colliding) {
+        if (this,weapon && colliding) {
           this.weapon = weapon.weapon;
         }
-        return colliding;
+        return weapon.loaded && colliding;
       });
     }
   }
@@ -141,7 +141,11 @@ class Player {
     );
   }
 
-  shoot(vector) {}
+  shoot(vector) {
+      game.bullets.push(new Bullet(this.x, this.y, vector, "player"));
+      this.weapon = "fist";
+      game.weapons.push(new Weapon(this.x, this.y, false));
+  }
 }
 
 function calculateVector(x1, y1, x2, y2) {
@@ -284,6 +288,7 @@ class Gamestate {
     this.enemies = [new Crachead(10, 10)];
     this.obstacles = [];
     this.weapons = [];
+    this.bullets = [];
   }
   newObstacles(layout) {
     this.obstacles = [];
@@ -350,6 +355,6 @@ game.newObstacles([
   [" ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", "b", " ", " ", " "]
 ]);
-game.weapons.push(new Weapon(64, 64));
+game.weapons.push(new Weapon(64, 64, true));
 
 game.loop();

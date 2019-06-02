@@ -1,10 +1,11 @@
 class Bullet{
-  constructor(xPos, yPos, vector){
+  constructor(xPos, yPos, vector, tag){
     this.x = xPos;
     this.y = yPos;
     this.vector = vector;
     this.speed = 3;
     this.size = 4;
+    this.tag = tag;
   }
   
   update() {
