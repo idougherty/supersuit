@@ -9,7 +9,7 @@ export class Enemy {
     this.texture = "";
   }
 
-  update() {}
+  update(_player, _game) {}
 
   draw(c) {
     c.fillStyle = "brown";
