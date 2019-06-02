@@ -6,11 +6,12 @@ export class Crate {
     this.height = 3 * TILE_SIZE;
     this.x = x;
     this.y = y;
-    this.texture = "";
+    this.texture = document.getElementById("crate");
   }
 
   draw(c) {
-    c.fillStyle = "#bd9647";
-    c.fillRect(this.x, this.y, this.width, this.height);
+    c.drawImage(this.texture, this.x, this.y, this.width, this.height);
+    //c.fillStyle = "#bd9647";
+    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 }

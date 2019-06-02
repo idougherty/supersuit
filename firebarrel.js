@@ -6,11 +6,12 @@ export class FireBarrel {
     this.height = TILE_SIZE;
     this.x = x;
     this.y = y;
-    this.texture = "";
+    this.texture = document.getElementById("barrel");
   }
 
   draw(c) {
-    c.fillStyle = "orange";
-    c.fillRect(this.x, this.y, this.width, this.height);
+    c.drawImage(this.texture, this.x, this.y, this.width, this.height);
+    //c.fillStyle = "orange";
+    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
