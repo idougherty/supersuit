@@ -313,7 +313,7 @@ class Gamestate {
     player.update();
 
     for (const enemy of this.enemies) {
-      enemy.update();
+      enemy.update(player, game);
     }
 
     for (const particle of p) {
