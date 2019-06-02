@@ -291,10 +291,11 @@ function draw() {
   }
 
   player.draw(c);
+  
   for (const enemy of game.enemies) {
     enemy.draw(c);
   }
-
+  
   for (const weapon of game.weapons) {
     weapon.draw(c);
   }
