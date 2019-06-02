@@ -105,9 +105,7 @@ class Player {
     }
   }
 
-  punch(vector) {
-    
-  }
+  punch(vector) {}
 
   shoot(vector) {}
 }
@@ -192,7 +190,6 @@ canvas.addEventListener("mousemove", event => {
       const ratio = 64 / distance;
       cursorX = playerX + xDist * ratio;
       cursorY = playerY + yDist * ratio;
-      console.log(cursorX, cursorY);
       return;
     }
   }
