@@ -3,7 +3,7 @@ import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
 import { Bookshelf } from "./bookshelf.js";
-import { removeIf } from "./util.js";
+import { removeIf, isCollidingCircle } from "./util.js";
 import { Weapon } from "./weapon.js";
 
 var canvas = document.getElementById("canvas");
@@ -58,7 +58,7 @@ class Player {
   calculateCollisions() {
     if (this.weapon != "gun") {
       removeIf(game.weapons, weapon => {
-        const colliding = game.isCollidingCircle(
+        const colliding = isCollidingCircle(
           this.x,
           this.y,
           this.radius,
@@ -137,14 +137,7 @@ class Player {
   punch() {
     console.log("owo");
     removeIf(game.enemies, enemy =>
-      game.isCollidingCircle(
-        cursorX,
-        cursorY,
-        32,
-        enemy.x,
-        enemy.y,
-        enemy.radius
-      )
+      isCollidingCircle(cursorX, cursorY, 32, enemy.x, enemy.y, enemy.radius)
     );
   }
 
@@ -311,14 +304,6 @@ class Gamestate {
         }
       }
     }
-  }
-
-  isCollidingCircle(x1, y1, r1, x2, y2, r2) {
-    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) <= r1 + r2;
-  }
-
-  isCollidingRect(x1, y1, w1, h1, x2, y2, w2, h2) {
-    return x1 + w1 > x2 && y1 + h1 > y2 && x1 < x2 + w2 && y1 < y2 + h2;
   }
 
   update() {
