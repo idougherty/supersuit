@@ -1,4 +1,4 @@
-class Weapon{
+export class Weapon{
   constructor(xPos, yPos){
     this.x = xPos;
     this.y = yPos;
@@ -6,8 +6,10 @@ class Weapon{
     this.width = 16;
   }
   
-  draw() {
+  draw(c) {
     c.fillStyle = "blue";
-    c.fillOval(this.x, this.y, this.width, this.height);
+    c.beginPath();
+    c.arc(this.x + this.width/2, this.y + this.width/2, this.width/2, 0, 2*Math.PI);
+    c.fill();
   }
 }

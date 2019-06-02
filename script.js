@@ -3,6 +3,7 @@ import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
 import { Bookshelf } from "./bookshelf.js";
+import { Weapon } from "./weapon.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -229,8 +230,8 @@ function draw() {
     enemy.draw(c);
   }
 
-  for (const particle of p) {
-    particle.update(c);
+  for (const weapon of game.weapons) {
+    weapon.draw(c);
   }
 
   drawCursor(c);
@@ -247,6 +248,7 @@ class Gamestate {
     this.speed = 1;
     this.enemies = [new Crachead(10, 10)];
     this.obstacles = [];
+    this.weapons = [];
   }
   newObstacles(layout) {
     this.obstacles = [];
@@ -278,10 +280,14 @@ class Gamestate {
   }
 
   isCollidingCircle(x1, y1, r1, x2, y2, r2) {
-    z = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+    const z = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
     return z <= r1 + r2;
   }
-
+  
+  isCollidingRect(x1, y1, w1, h1, x2, y2, w2, h2) {
+    return x1 + w1 > x2 && y1 + h1 > y2 && x1 < x2 + w2 && y1 < y2 + h2;
+  }
+  
   update() {
     this.speed =
       120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
@@ -312,7 +318,7 @@ game.newObstacles([
   [" ", " ", " ", " ", " ", " ", " ", " "],
   ["c", " ", " ", " ", " ", " ", "f", " "],
   [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", "b", " ", " ", " "]
-]);
+  [" ", " ", " ", " ", "b", " ", " ", " "]]);
+game.weapons.push(new Weapon(64, 64));
 
 game.loop();
