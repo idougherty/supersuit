@@ -337,7 +337,7 @@ p.push(new Particle(200, 0));
 class Gamestate {
   constructor() {
     this.speed = 1;
-    this.enemies = [new Crachead(10, 10)];
+    this.enemies = [new Crachead(10, 10), new GuyThatShootsYou(10,50)];
     this.obstacles = [];
     this.weapons = [];
     this.bullets = [];
