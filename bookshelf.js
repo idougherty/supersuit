@@ -1,4 +1,6 @@
-class Bookshelf extends Obstacle{
+import { Obstacle } from "./obstacle.js"
+
+class Bookshelf extends Obstacle {
 	constructor(xPos, yPos){
 		this.width = 256;
 		this.height = 64;
