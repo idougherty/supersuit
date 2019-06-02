@@ -1,6 +1,4 @@
-import { Obstacle } from "./obstacle.js";
-
-export class Wall extends Obstacle {
+export class Wall {
   constructor(xPos, yPos) {
     this.width = 64;
     this.height = 192;

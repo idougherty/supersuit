@@ -1,6 +1,4 @@
-import { Obstacle } from "./obstacle.js";
-
-export class FireBarrel extends Obstacle {
+export class FireBarrel {
   constructor(xPos, yPos) {
     this.width = 64;
     this.height = 64;

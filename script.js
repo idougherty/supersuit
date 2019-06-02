@@ -1,4 +1,8 @@
 import { Crachead } from "./enemies.js";
+import { Crate } from "./crate.js";
+import { Wall } from "./wall.js";
+import { FireBarrel } from "./firebarrel.js";
+import { Bookshelf } from "./bookshelf.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -16,10 +20,11 @@ class Particle {
       "rgba(" + (Math.floor(Math.random() * 100) + 155) + ", 50, 30, 1)";
   }
 
-  run() {
+  draw(c) {
     c.fillStyle = this.color;
     c.fillRect(this.x, this.y, this.size, this.size);
-
+  }
+  update() {
     this.y += this.vy;
   }
 }
@@ -33,7 +38,7 @@ class Player {
     this.width = 20;
     this.height = 20;
     this.weapon = "fist";
-    
+
     this.keydown = {
       LEFT: false,
       RIGHT: false,
@@ -99,28 +104,25 @@ class Player {
       this.vy = 4;
     }
   }
-  
-  punch(vector) {
-    
-  }
-  
+
+  punch(vector) {}
+
   shoot(vector) {
-    console.log(vector);
+    
   }
 }
 
 canvas.addEventListener("click", function(e) {
-  const xDist = player.x + player.width/2 - e.layerX;
-  const yDist = player.y + player.height/2 - e.layerY;
-  const ratio = 1/Math.sqrt(xDist*xDist + yDist*yDist);
-  const vector = [xDist*ratio, yDist*ratio];
-  
-  // console.log(vector);
-  // if(player.weapon = "fist") {
-  //   player.punch(vector);
-  // } else {
+  const xDist = player.x + player.width / 2 - e.layerX;
+  const yDist = player.y + player.height / 2 - e.layerY;
+  const ratio = 1 / Math.sqrt(xDist * xDist + yDist * yDist);
+  const vector = [xDist * ratio, yDist * ratio];
+ 
+  if(player.weapon = "fist") {
+    player.punch(vector);
+  } else {
     player.shoot(vector);
-  // }
+  }
 });
 
 document.addEventListener("keydown", function(e) {
@@ -169,29 +171,89 @@ document.addEventListener("keyup", function(e) {
   }
 });
 
+window.mouseX = 0;
+window.mouseY = 0;
+
+canvas.addEventListener("mousemove", event => {
+  mouseX = event.offsetX;
+  mouseY = event.offsetY;
+});
+
+function drawCursor(c) {
+  c.beginPath();
+  c.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
+  c.fillStyle = "#da1001";
+  c.fill();
+}
+
+function draw() {
+  c.fillStyle = "black";
+  c.fillRect(0, 0, canvas.width, canvas.height);
+
+  player.draw(c);
+  for (const enemy of game.enemies) {
+    enemy.draw(c);
+  }
+
+  for (const particle of p) {
+    particle.update(c);
+  }
+
+  drawCursor(c);
+
+  requestAnimationFrame(draw);
+}
+
+requestAnimationFrame(draw);
+
 p.push(new Particle(200, 0));
 
 class Gamestate {
   constructor() {
     this.speed = 1;
     this.enemies = [new Crachead(10, 10)];
+    this.obstacles = [];
+  }
+  newObstacles(layout) {
+    this.obstacles = [];
+    
+    for (let y = 0; y < layout.length; y++) {
+      for (let x = 0; x < layout.length; x++) {
+        switch (layout[y][x]) {
+          case "c": //crate
+            this.obstacles.push(new Crate(x * 64, y * 64));
+            break;
+
+          case "b": //bookshelf
+            this.obstacles.push(new Bookshelf(x * 64, y * 64));
+            break;
+
+          case "f": //fire_barrel
+            this.obstacles.push(new FireBarrel(x * 64, y * 64));
+            break;
+
+          case "w": //wall
+            this.obstacles.push(new Wall(x * 64, y * 64));
+            break;
+
+          default:
+            console.log("i don't know what this is");
+        }
+      }
+    }
   }
   update() {
     this.speed =
       120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
-    c.fillStyle = "black";
-    c.fillRect(0, 0, canvas.width, canvas.height);
 
     player.update();
-    player.draw();
 
     for (const enemy of this.enemies) {
       enemy.update();
-      enemy.draw(c);
     }
 
     for (const particle of p) {
-      particle.run();
+      particle.update();
     }
   }
   loop() {
@@ -202,5 +264,13 @@ class Gamestate {
 
 window.game = new Gamestate();
 window.player = new Player();
+game.newObstacles([[" ", " ", " ", " ", "w", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  ["c", " ", " ", " ", " ", " ", "f", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", "b", " ", " ", " ", ],]);
 
 game.loop();
