@@ -162,20 +162,24 @@ canvas.addEventListener("click", function(e) {
 });
 
 document.addEventListener("keydown", function(e) {
-  switch (e.keyCode) {
-    case 37: //left
+  switch (e.code) {
+    case "KeyA":
+    case "ArrowLeft":
       player.keydown.LEFT = true;
       break;
 
-    case 38: //up
+    case "KeyW":
+    case "ArrowUp":
       player.keydown.UP = true;
       break;
 
-    case 39: //right
+    case "KeyD":
+    case "ArrowRight":
       player.keydown.RIGHT = true;
       break;
 
-    case 40: //down
+    case "KeyS":
+    case "ArrowDown":
       player.keydown.DOWN = true;
       break;
 
@@ -186,20 +190,24 @@ document.addEventListener("keydown", function(e) {
 });
 
 document.addEventListener("keyup", function(e) {
-  switch (e.keyCode) {
-    case 37: //left
+  switch (e.code) {
+    case "KeyA":
+    case "ArrowLeft":
       player.keydown.LEFT = false;
       break;
 
-    case 38: //up
+    case "KeyW":
+    case "ArrowUp":
       player.keydown.UP = false;
       break;
 
-    case 39: //right
+    case "KeyD":
+    case "ArrowRight":
       player.keydown.RIGHT = false;
       break;
 
-    case 40: //down
+    case "KeyS":
+    case "ArrowDown":
       player.keydown.DOWN = false;
       break;
 
