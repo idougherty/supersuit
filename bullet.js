@@ -1,4 +1,8 @@
-import { isCollidingCircleEntities, removeIf } from "./util.js";
+import {
+  isCollidingCircleEntities,
+  removeIf,
+  isCollidingRectEntities
+} from "./util.js";
 
 export class Bullet {
   constructor(x, y, vector, tag) {
@@ -12,9 +16,19 @@ export class Bullet {
     this.tag = tag;
   }
 
+  removeSelf(game) {
+    removeIf(game.bullets, bullet => bullet === this);
+  }
+
   update(player, game) {
     this.x += this.vector[0] * this.speed;
     this.y += this.vector[1] * this.speed;
+    for (const obstacle of game.obstacles) {
+      if (isCollidingRectEntities(this, obstacle)) {
+        this.removeSelf(game);
+        return;
+      }
+    }
     switch (this.tag) {
       case "enemy":
         if (isCollidingCircleEntities(this, player)) {
@@ -26,7 +40,7 @@ export class Bullet {
       case "player":
         removeIf(game.enemies, enemy => {
           const isColliding = isCollidingCircleEntities(this, enemy);
-          if (isColliding) removeIf(game.bullets, bullet => bullet === this);
+          if (isColliding) this.removeSelf(game);
           return isColliding;
         });
     }
