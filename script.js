@@ -33,6 +33,8 @@ class Player {
     this.vy = 0;
     this.width = 20;
     this.height = 20;
+    this.weapon = "fist";
+
     this.keydown = {
       LEFT: false,
       RIGHT: false,
@@ -98,7 +100,27 @@ class Player {
       this.vy = 4;
     }
   }
+
+  punch(vector) {}
+
+  shoot(vector) {
+    console.log(vector);
+  }
 }
+
+canvas.addEventListener("click", function(e) {
+  const xDist = player.x + player.width / 2 - e.layerX;
+  const yDist = player.y + player.height / 2 - e.layerY;
+  const ratio = 1 / Math.sqrt(xDist * xDist + yDist * yDist);
+  const vector = [xDist * ratio, yDist * ratio];
+
+  // console.log(vector);
+  // if(player.weapon = "fist") {
+  //   player.punch(vector);
+  // } else {
+  player.shoot(vector);
+  // }
+});
 
 document.addEventListener("keydown", function(e) {
   switch (e.keyCode) {
