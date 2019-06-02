@@ -84,12 +84,15 @@ class Player {
       this.vx *= 0.7;
     }
 
-    if((this.keydown.RIGHT || this.keydown.LEFT) && (this.keydown.UP || this.keydown.DOWN)) {
+    if (
+      (this.keydown.RIGHT || this.keydown.LEFT) &&
+      (this.keydown.UP || this.keydown.DOWN)
+    ) {
       this.maxSpeed = 2.828;
     } else {
       this.maxSpeed = 4;
     }
-    
+
     if (this.keydown.UP && !this.keydown.DOWN) {
       this.up();
     } else if (this.keydown.DOWN && !this.keydown.UP) {
@@ -157,7 +160,6 @@ class Player {
   }
 
   punch() {
-    console.log("owo");
     removeIf(game.enemies, enemy =>
       isCollidingCircle(cursorX, cursorY, 32, enemy.x, enemy.y, enemy.radius)
     );
@@ -182,7 +184,7 @@ canvas.addEventListener("click", function(e) {
     player.punch();
   } else {
     const [playerX, playerY] = player.center();
-    const vector = calculateVector(playerX, playerY, e.layerX, e.layerY);
+    const vector = calculateVector(playerX, playerY, e.offsetX, e.offsetY);
     player.shoot(vector);
   }
 });
@@ -212,7 +214,6 @@ document.addEventListener("keydown", function(e) {
     default:
       return;
   }
-  game.update();
 });
 
 document.addEventListener("keyup", function(e) {
@@ -281,23 +282,21 @@ function drawCursor(c) {
 function draw() {
   player.update();
 
-  game.speed = 120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
+  game.speed =
+    120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
 
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (const obstacle of game.obstacles) {
-    obstacle.draw(c);
-  }
-
   player.draw(c);
-  
-  for (const enemy of game.enemies) {
-    enemy.draw(c);
-  }
-  
-  for (const weapon of game.weapons) {
-    weapon.draw(c);
+
+  for (const entity of [
+    ...game.obstacles,
+    ...game.enemies,
+    ...game.weapons,
+    ...game.bullets
+  ]) {
+    entity.draw(c);
   }
 
   drawCursor(c);
