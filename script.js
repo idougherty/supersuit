@@ -31,6 +31,8 @@ class Player {
     this.radius = 16;
     this.weapon = "fist";
     this.maxSpeed = 4;
+    this.punchCoolDown = 0;
+    this.texture = document.getElementById("frozoefront");
 
     this.keydown = {
       LEFT: false,
@@ -41,8 +43,9 @@ class Player {
   }
   //owo
   draw() {
-    c.fillStyle = "white";
-    c.fillRect(this.x, this.y, this.width, this.height);
+    c.drawImage(this.texture, this.x, this.y, this.width, this.height);
+    //c.fillStyle = "white";
+    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 
   respawn() {
@@ -70,14 +73,15 @@ class Player {
     }
 
     for (const obs of game.obstacles) {
-      if (
-        obs instanceof Trapdoor &&
-        game.enemies.length === 0 &&
-        isCollidingRectEntities(player, obs)
-      ) {
-        game.currentLevel++;
-        game.newObstacles(game.levels[game.currentLevel]);
-        this.respawn();
+      if (obs instanceof Trapdoor) {
+        if (game.enemies.length === 0) {
+          obs.open = true;
+        }
+        if (obs.open && isCollidingRectEntities(player, obs)) {
+          game.currentLevel++;
+          game.newObstacles(game.levels[game.currentLevel]);
+          this.respawn();
+        }
       }
     }
     if (this.y < 0) {
@@ -97,6 +101,8 @@ class Player {
   }
 
   update() {
+    this.punchCoolDown++;
+
     if (this.keydown.LEFT && !this.keydown.RIGHT) {
       this.left();
     } else if (this.keydown.RIGHT && !this.keydown.LEFT) {
@@ -150,6 +156,7 @@ class Player {
     } else {
       this.vx = -this.maxSpeed;
     }
+    this.texture = document.getElementById("left");
   }
 
   right() {
@@ -158,6 +165,7 @@ class Player {
     } else {
       this.vx = this.maxSpeed;
     }
+    this.texture = document.getElementById("right");
   }
   //iwi
   up() {
@@ -166,6 +174,7 @@ class Player {
     } else {
       this.vy = -this.maxSpeed;
     }
+    this.texture = document.getElementById("back");
   }
 
   down() {
@@ -174,6 +183,7 @@ class Player {
     } else {
       this.vy = this.maxSpeed;
     }
+    this.texture = document.getElementById("frontwalk");
   }
   //uwu
 
@@ -210,8 +220,9 @@ export function calculateVector(x1, y1, x2, y2) {
 }
 
 canvas.addEventListener("click", function(e) {
-  if (player.weapon === "fist") {
+  if (player.weapon === "fist" && player.punchCoolDown > 20) {
     player.punch();
+    player.punchCoolDown = 0;
   } else {
     const [playerX, playerY] = entityCenter(player);
     const vector = calculateVector(playerX, playerY, e.offsetX, e.offsetY);
@@ -315,7 +326,7 @@ function draw() {
   game.speed =
     120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
 
-  c.fillStyle = "black";
+  c.fillStyle = `rgba(0, 0, 0, ${(1 / game.speed) * 15})`;
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   for (const entity of [
@@ -391,7 +402,7 @@ class Gamestate {
       ...this.bullets,
       ...this.particles
     ]) {
-      entity.update(player, game);
+      if (entity.update) entity.update(player, game);
     }
   }
   loop() {
