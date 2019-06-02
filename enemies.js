@@ -59,14 +59,19 @@ export class GuyThatShootsYou extends Enemy {
   constructor(x, y) {
     super(x, y);
     this.texture = "";
+    this.reload = 10
   }
 
   update(player, game) {
+    this.reload -= 1;
     var dist = Math.sqrt((player.x - this.x) ** 2 + (player.y - this.y) ** 2);
     var direction_vector = [
       (player.x - this.x) / dist,
       (player.y - this.y) / dist
     ];
-    game.bullets.push(new Bullet(this.x, this.y, direction_vector, "enemy"));
+    if (this.reload <= 0) {
+      game.bullets.push(new Bullet(this.x, this.y, direction_vector, "enemy"));
+      this.reload = 25
+    }
   }
 }

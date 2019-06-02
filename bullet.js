@@ -29,21 +29,24 @@ export class Bullet {
         return;
       }
     }
-    switch (this.tag) {
-      case "enemy":
+    
+    if (this.tag == "enemy"){
         if (isCollidingCircleEntities(this, player)) {
-          alert(
-            "OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! " +
-              "The code monkeys at our headquarters are working VEWY HAWD to fix this!"
-          );
+            alert(
+                "bad"
+            );
         }
-      case "player":
+    }
+    if (this.tag == "player") {
         removeIf(game.enemies, enemy => {
-          const isColliding = isCollidingCircleEntities(this, enemy);
-          if (isColliding) this.removeSelf(game);
-          return isColliding;
+            const isColliding = isCollidingCircleEntities(this, enemy);
+            if (isColliding) {
+                this.removeSelf(game);
+                return isColliding;
+            }
         });
     }
+    
   }
 
   draw(c) {
