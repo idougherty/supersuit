@@ -5,9 +5,10 @@ export class Bullet {
     this.x = xPos;
     this.y = yPos;
     this.radius = 2;
+    this.width = 4;
+    this.height = 4;
     this.vector = vector;
     this.speed = 3;
-    this.size = 4;
     this.tag = tag;
   }
 
@@ -23,12 +24,16 @@ export class Bullet {
           );
         }
       case "player":
-        removeIf(game.enemies, enemy => isCollidingCircleEntities(this, enemy));
+        removeIf(game.enemies, enemy => {
+          const isColliding = isCollidingCircleEntities(this, enemy);
+          if (isColliding) removeIf(game.bullets, bullet => bullet === this);
+          return isColliding;
+        });
     }
   }
 
-  draw() {
+  draw(c) {
     c.fillStyle = "grey";
-    c.fillRect(this.x, this.y, this.size);
+    c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
