@@ -26,7 +26,7 @@ export class Bullet {
     this.x += this.vector[0] * this.speed;
     this.y += this.vector[1] * this.speed;
     for (const obstacle of game.obstacles) {
-      if (obstacle instanceof Trapdoor && isCollidingRectEntities(this, obstacle)) {
+      if (!(obstacle instanceof Trapdoor) && isCollidingRectEntities(this, obstacle)) {
         this.removeSelf(game);
         return;
       }
