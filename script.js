@@ -3,6 +3,7 @@ import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
 import { Bookshelf } from "./bookshelf.js";
+import { removeIf } from "./util.js";
 import { Weapon } from "./weapon.js";
 
 var canvas = document.getElementById("canvas");
@@ -14,7 +15,7 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    
+
     this.vy = 2.5;
     this.size = 5;
     this.color =
@@ -52,6 +53,7 @@ class Player {
     c.fillStyle = "white";
     c.fillRect(this.x, this.y, this.width, this.height);
   }
+<<<<<<< HEAD
   
   calculateCollisions() {
     if(this.weapon != "gun") {
@@ -65,6 +67,11 @@ class Player {
     }
   }
   
+=======
+
+  calculateCollisions() {}
+
+>>>>>>> b2d9fe0c16f3e59c8609a8c14973dc8f8bfd3775
   update() {
     if (this.keydown.LEFT && !this.keydown.RIGHT) {
       this.left();
@@ -120,16 +127,32 @@ class Player {
       this.vy = 4;
     }
   }
+<<<<<<< HEAD
   
   
   punch(vector) {
+=======
+
+  center() {
+    return [this.x + this.width / 2, this.y + this.height / 2];
+>>>>>>> b2d9fe0c16f3e59c8609a8c14973dc8f8bfd3775
+  }
+
+  punch() {
+    console.log("owo");
+    removeIf(game.enemies, enemy =>
+      game.isCollidingCircle(
+        cursorX,
+        cursorY,
+        32,
+        enemy.x,
+        enemy.y,
+        enemy.radius
+      )
+    );
   }
 
   shoot(vector) {}
-}
-
-function playerCenter() {
-  return [player.x + player.width / 2, player.y + player.height / 2];
 }
 
 function calculateVector(x1, y1, x2, y2) {
@@ -141,10 +164,10 @@ function calculateVector(x1, y1, x2, y2) {
 
 canvas.addEventListener("click", function(e) {
   if (player.weapon === "fist") {
-    const [playerX, playerY] = playerCenter();
-    const vector = calculateVector(playerX, playerY, e.layerX, e.layerY);
-    player.punch(vector);
+    player.punch();
   } else {
+    const [playerX, playerY] = player.center();
+    const vector = calculateVector(playerX, playerY, e.layerX, e.layerY);
     player.shoot(vector);
   }
 });
@@ -200,7 +223,7 @@ let cursorY = 0;
 
 function calculateCursorCoords() {
   if (player.weapon === "fist") {
-    const [playerX, playerY] = playerCenter();
+    const [playerX, playerY] = player.center();
     const xDist = mouseX - playerX;
     const yDist = mouseY - playerY;
     const distance = Math.sqrt(xDist ** 2 + yDist ** 2);
@@ -235,9 +258,9 @@ function drawCursor(c) {
 function draw() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   for (const obstacle of game.obstacles) {
-      obstacle.draw(c);
+    obstacle.draw(c);
   }
 
   player.draw(c);
@@ -295,14 +318,13 @@ class Gamestate {
   }
 
   isCollidingCircle(x1, y1, r1, x2, y2, r2) {
-    const z = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
-    return z <= r1 + r2;
+    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) <= r1 + r2;
   }
-  
+
   isCollidingRect(x1, y1, w1, h1, x2, y2, w2, h2) {
     return x1 + w1 > x2 && y1 + h1 > y2 && x1 < x2 + w2 && y1 < y2 + h2;
   }
-  
+
   update() {
     this.speed =
       120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
@@ -323,8 +345,12 @@ class Gamestate {
   }
 }
 
-window.game = new Gamestate();
-window.player = new Player();
+const game = new Gamestate();
+const player = new Player();
+
+window.game = game;
+window.player = player;
+
 game.newObstacles([
   [" ", " ", " ", " ", "w", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " "],
@@ -333,7 +359,8 @@ game.newObstacles([
   [" ", " ", " ", " ", " ", " ", " ", " "],
   ["c", " ", " ", " ", " ", " ", "f", " "],
   [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", "b", " ", " ", " "]]);
+  [" ", " ", " ", " ", "b", " ", " ", " "]
+]);
 game.weapons.push(new Weapon(64, 64));
 
 game.loop();
