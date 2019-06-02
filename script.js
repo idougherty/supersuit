@@ -52,7 +52,11 @@ class Player {
     c.fillStyle = "white";
     c.fillRect(this.x, this.y, this.width, this.height);
   }
-
+  
+  calculateCollisions() {
+    
+  }
+  
   update() {
     if (this.keydown.LEFT && !this.keydown.RIGHT) {
       this.left();
@@ -73,6 +77,7 @@ class Player {
     this.x += this.vx;
     this.y += this.vy;
 
+    this.calculateCollisions();
     calculateCursorCoords();
   }
 
