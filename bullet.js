@@ -4,6 +4,8 @@ import {
   isCollidingRectEntities
 } from "./util.js";
 
+import {Trapdoor} from "./trapdoor.js";
+
 export class Bullet {
   constructor(x, y, vector, tag) {
     this.x = x;
@@ -24,7 +26,7 @@ export class Bullet {
     this.x += this.vector[0] * this.speed;
     this.y += this.vector[1] * this.speed;
     for (const obstacle of game.obstacles) {
-      if (isCollidingRectEntities(this, obstacle)) {
+      if (obstacle instanceof Trapdoor && isCollidingRectEntities(this, obstacle)) {
         this.removeSelf(game);
         return;
       }
