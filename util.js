@@ -9,6 +9,14 @@ export function removeIf(arr, callback) {
   }
 }
 
+export function removeIfEq(arr, elem, cb) {
+  removeIf(arr, a => {
+    const remove = a === elem;
+    if (remove && cb) cb();
+    return remove;
+  });
+}
+
 export const isCollidingCircle = (x1, y1, r1, x2, y2, r2) =>
   Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) <= r1 + r2;
 

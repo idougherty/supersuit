@@ -11,7 +11,5 @@ export class Crate {
 
   draw(c) {
     c.drawImage(this.texture, this.x, this.y, this.width, this.height);
-    //c.fillStyle = "#bd9647";
-    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 }

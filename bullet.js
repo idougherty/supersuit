@@ -1,10 +1,11 @@
 import {
   isCollidingCircleEntities,
   removeIf,
-  isCollidingRectEntities
+  isCollidingRectEntities,
+  removeIfEq
 } from "./util.js";
 
-import {Trapdoor} from "./trapdoor.js";
+import { Trapdoor } from "./trapdoor.js";
 
 export class Bullet {
   constructor(x, y, vector, tag) {
@@ -18,16 +19,15 @@ export class Bullet {
     this.tag = tag;
   }
 
-  removeSelf(game) {
-    removeIf(game.bullets, bullet => bullet === this);
-  }
-
   update(player, game) {
     this.x += this.vector[0] * this.speed;
     this.y += this.vector[1] * this.speed;
     for (const obstacle of game.obstacles) {
-      if (!(obstacle instanceof Trapdoor) && isCollidingRectEntities(this, obstacle)) {
-        this.removeSelf(game);
+      if (
+        !(obstacle instanceof Trapdoor) &&
+        isCollidingRectEntities(this, obstacle)
+      ) {
+        removeIfEq(game.bullets, this);
         return;
       }
     }
@@ -42,7 +42,7 @@ export class Bullet {
         const isColliding = isCollidingCircleEntities(this, enemy);
         if (isColliding) {
           enemy.kill(game);
-          this.removeSelf(game);
+          removeIfEq(game.bullets, this);
         }
         return isColliding;
       });
