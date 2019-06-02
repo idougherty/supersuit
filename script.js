@@ -39,6 +39,7 @@ class Player {
     this.vy = 0;
     this.width = 32;
     this.height = 32;
+    this.radius = 16;
     this.weapon = "fist";
 
     this.keydown = {
@@ -53,25 +54,26 @@ class Player {
     c.fillStyle = "white";
     c.fillRect(this.x, this.y, this.width, this.height);
   }
-<<<<<<< HEAD
-  
+
   calculateCollisions() {
-    if(this.weapon != "gun") {
-      for(int i = 0; i < Gamestate.weapons.size(); i++){
-        if(this.collision == Gamestate.weapons[i]){
-          this.weapon = Gamestate.weapons[i];
-          Gamestate.weapons.splice(i, 1);
-          break;
+    if (this.weapon != "gun") {
+      removeIf(game.weapons, weapon => {
+        const colliding = game.isCollidingCircle(
+          this.x,
+          this.y,
+          this.radius,
+          weapon.x,
+          weapon.y,
+          weapon.radius
+        );
+        if (colliding) {
+          this.weapon = weapon.weapon;
         }
-      }
+        return colliding;
+      });
     }
   }
-  
-=======
 
-  calculateCollisions() {}
-
->>>>>>> b2d9fe0c16f3e59c8609a8c14973dc8f8bfd3775
   update() {
     if (this.keydown.LEFT && !this.keydown.RIGHT) {
       this.left();
@@ -127,15 +129,9 @@ class Player {
       this.vy = 4;
     }
   }
-<<<<<<< HEAD
-  
-  
-  punch(vector) {
-=======
 
   center() {
     return [this.x + this.width / 2, this.y + this.height / 2];
->>>>>>> b2d9fe0c16f3e59c8609a8c14973dc8f8bfd3775
   }
 
   punch() {
