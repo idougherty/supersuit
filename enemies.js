@@ -22,8 +22,9 @@ export class Enemy {
   kill(_game) {}
 
   draw(c) {
-    c.fillStyle = "brown";
-    c.fillRect(this.x, this.y, this.width, this.height);
+    c.drawImage(this.texture, this.x, this.y, this.width, this.height);
+    //c.fillStyle = "brown";
+    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 
   calculateCollisions() {
@@ -49,7 +50,7 @@ export class Enemy {
 export class Crachead extends Enemy {
   constructor(x, y) {
     super(x, y);
-    this.texture = "";
+    this.texture = document.getElementById("crackhead");
   }
 
   update(player, game) {
@@ -86,7 +87,7 @@ export class Crachead extends Enemy {
 export class GuyThatShootsYou extends Enemy {
   constructor(x, y) {
     super(x, y);
-    this.texture = "";
+    this.texture = document.getElementById("gunguy");
     this.reload = 10;
   }
 
