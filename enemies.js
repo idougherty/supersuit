@@ -8,13 +8,8 @@ export class Enemy {
     this.radius = 16;
     this.texture = "";
   }
-<<<<<<< HEAD
-//VwV
-  update() {}
-=======
 
   update(_player, _game) {}
->>>>>>> 04adb2b6c9f8ff7ebae8e35427f53ec46039390c
 
   draw(c) {
     c.fillStyle = "brown";

@@ -105,7 +105,7 @@ class Player {
     this.x += this.vx;
 
     for (const obs of game.obstacles) {
-      if (isCollidingRectEntities(player, obs)) {
+      if (typeof obs != "trapdoor" && isCollidingRectEntities(player, obs)) {
         this.x -= this.vx;
         this.vx = 0;
       }
@@ -114,7 +114,7 @@ class Player {
     this.y += this.vy;
 
     for (const obs of game.obstacles) {
-      if (isCollidingRectEntities(player, obs)) {
+      if (typeof obs != "trapdoor" && isCollidingRectEntities(player, obs)) {
         this.y -= this.vy;
         this.vy = 0;
       }
@@ -155,14 +155,7 @@ class Player {
       this.vy = this.maxSpeed;
     }
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
-  
   //uwu
-  punch(vector) {
-=======
-=======
->>>>>>> 04adb2b6c9f8ff7ebae8e35427f53ec46039390c
 
   center() {
     return [this.x + this.width / 2, this.y + this.height / 2];
