@@ -7,7 +7,7 @@ export class Crate {
     this.texture = "";
   }
 
-  draw() {
+  draw(c) {
     c.fillStyle = "#bd9647";
     c.fillRect(this.xPos, this.yPos, this.width, this.height);
   }

@@ -7,7 +7,7 @@ export class Bookshelf {
     this.texture = "";
   }
 
-  draw() {
+  draw(c) {
     c.fillStyle = "brown";
     c.fillRect(this.xPos, this.yPos, this.width, this.height);
   }

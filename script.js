@@ -13,7 +13,7 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-
+    
     this.vy = 2.5;
     this.size = 5;
     this.color =
@@ -35,8 +35,8 @@ class Player {
     this.y = canvas.height / 2;
     this.vx = 0;
     this.vy = 0;
-    this.width = 20;
-    this.height = 20;
+    this.width = 32;
+    this.height = 32;
     this.weapon = "fist";
 
     this.keydown = {
@@ -189,6 +189,10 @@ function drawCursor(c) {
 function draw() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
+  
+  for (const obstacle of game.obstacles) {
+      obstacle.draw(c);
+  }
 
   player.draw(c);
   for (const enemy of game.enemies) {

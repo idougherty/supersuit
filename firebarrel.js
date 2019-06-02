@@ -7,7 +7,7 @@ export class FireBarrel {
     this.texture = "";
   }
 
-  draw() {
+  draw(c) {
     c.fillStyle = "orange";
     c.fillRect(this.xPos, this.yPos, this.width, this.height);
   }
