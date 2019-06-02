@@ -3,8 +3,14 @@ import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
 import { Bookshelf } from "./bookshelf.js";
-import { removeIf, isCollidingCircle, isCollidingRect } from "./util.js";
+import {
+  removeIf,
+  isCollidingCircle,
+  isCollidingCircleEntities,
+  isCollidingRectEntities
+} from "./util.js";
 import { Weapon } from "./weapon.js";
+import { Bullet } from "./bullet.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -59,18 +65,12 @@ class Player {
   calculateCollisions() {
     if (this.weapon != "gun") {
       removeIf(game.weapons, weapon => {
-        const colliding = isCollidingCircle(
-          this.x,
-          this.y,
-          this.radius,
-          weapon.x,
-          weapon.y,
-          weapon.radius
-        );
-        if (this,weapon && colliding) {
+        const shouldPickUp =
+          weapon.loaded && isCollidingCircleEntities(this, weapon);
+        if (shouldPickUp) {
           this.weapon = weapon.weapon;
         }
-        return weapon.loaded && colliding;
+        return shouldPickUp;
       });
     }
   }
@@ -99,23 +99,23 @@ class Player {
     }
 
     this.x += this.vx;
-    
-    for(const obs of game.obstacles) {
-      if(isCollidingRect(player.x, player.y, player.width, player.height, obs.x, obs.y, obs.width, obs.height)) {
+
+    for (const obs of game.obstacles) {
+      if (isCollidingRectEntities(player, obs)) {
         this.x -= this.vx;
         this.vx = 0;
       }
     }
-    
+
     this.y += this.vy;
 
-    for(const obs of game.obstacles) {
-      if(isCollidingRect(player.x, player.y, player.width, player.height, obs.x, obs.y, obs.width, obs.height)) {
+    for (const obs of game.obstacles) {
+      if (isCollidingRectEntities(player, obs)) {
         this.y -= this.vy;
         this.vy = 0;
       }
     }
-    
+
     this.calculateCollisions();
     calculateCursorCoords();
   }
@@ -162,10 +162,11 @@ class Player {
       isCollidingCircle(cursorX, cursorY, 32, enemy.x, enemy.y, enemy.radius)
     );
   }
+
   shoot(vector) {
-      game.bullets.push(new Bullet(this.x, this.y, vector, "player"));
-      this.weapon = "fist";
-      game.weapons.push(new Weapon(this.x, this.y, false));
+    game.bullets.push(new Bullet(this.x, this.y, vector, "player"));
+    this.weapon = "fist";
+    game.weapons.push(new Weapon(this.x, this.y, false));
   }
 }
 
@@ -336,9 +337,9 @@ class Gamestate {
     });
   }
 
-  update() {      
-    for (const enemy of this.enemies) {
-      enemy.update(player, game);
+  update() {
+    for (const entity of [...this.enemies, ...this.bullets]) {
+      entity.update(player, game);
     }
 
     for (const particle of p) {
