@@ -29,22 +29,22 @@ export class Bullet {
         return;
       }
     }
-    
-    if (this.tag == "enemy"){
-        if (isCollidingCircleEntities(this, player)) {
-            player.respawn();
-        }
+
+    if (this.tag == "enemy") {
+      if (isCollidingCircleEntities(this, player)) {
+        player.respawn();
+      }
     }
     if (this.tag == "player") {
-        removeIf(game.enemies, enemy => {
-            const isColliding = isCollidingCircleEntities(this, enemy);
-            if (isColliding) {
-                this.removeSelf(game);
-                return isColliding;
-            }
-        });
+      removeIf(game.enemies, enemy => {
+        const isColliding = isCollidingCircleEntities(this, enemy);
+        if (isColliding) {
+          enemy.kill(game);
+          this.removeSelf(game);
+        }
+        return isColliding;
+      });
     }
-    
   }
 
   draw(c) {

@@ -27,3 +27,8 @@ export const isCollidingRect = (x1, y1, w1, h1, x2, y2, w2, h2) =>
 
 export const isCollidingRectEntities = (a, b) =>
   isCollidingRect(a.x, a.y, a.width, a.height, b.x, b.y, b.width, b.height);
+
+export const entityCenter = entity => [
+  entity.x + entity.width / 2,
+  entity.y + entity.height / 2
+];

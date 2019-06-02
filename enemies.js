@@ -1,10 +1,10 @@
 import { Bullet } from "./bullet.js";
 import { Trapdoor } from "./trapdoor.js";
-import { isCollidingRectEntities } from "./util.js";
+import { isCollidingRectEntities, entityCenter } from "./util.js";
+import { Weapon } from "./weapon.js";
 
 export class Enemy {
   constructor(x, y) {
-    this.health = 1;
     this.x = x;
     this.y = y;
     this.width = 32;
@@ -15,25 +15,27 @@ export class Enemy {
 
   update(_player, _game) {}
 
+  kill(_game) {}
+
   draw(c) {
     c.fillStyle = "brown";
     c.fillRect(this.x, this.y, this.width, this.height);
   }
-  
+
   calculateCollisions() {
-   if(this.y < 0){
+    if (this.y < 0) {
       this.y = 0;
       this.vy = 0;
     }
-    if(this.y + this.height > canvas.height){
+    if (this.y + this.height > canvas.height) {
       this.y = canvas.height - this.height;
       this.vy = 0;
     }
-    if(this.x < 0){
+    if (this.x < 0) {
       this.x = 0;
       this.vx = 0;
     }
-    if(this.x + this.width > canvas.width){
+    if (this.x + this.width > canvas.width) {
       this.x = canvas.width - this.width;
       this.vx = 0;
     }
@@ -80,6 +82,13 @@ export class GuyThatShootsYou extends Enemy {
     this.reload = 10;
   }
 
+  kill(game) {
+    const [centerX, centerY] = entityCenter(this);
+    game.weapons.push(
+      new Weapon(centerX - this.width / 4, centerY - this.height / 4, true)
+    );
+  }
+
   update(player, game) {
     this.reload -= 1;
     var dist = Math.sqrt((player.x - this.x) ** 2 + (player.y - this.y) ** 2);
@@ -88,7 +97,14 @@ export class GuyThatShootsYou extends Enemy {
       (player.y - this.y) / dist
     ];
     if (this.reload <= 0) {
-      game.bullets.push(new Bullet(this.x + this.width/2, this.y + this.height/2, direction_vector, "enemy"));
+      game.bullets.push(
+        new Bullet(
+          this.x + this.width / 2,
+          this.y + this.height / 2,
+          direction_vector,
+          "enemy"
+        )
+      );
       this.reload = 25;
     }
   }
