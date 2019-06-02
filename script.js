@@ -105,7 +105,7 @@ class Player {
   }
   
   shoot(vector) {
-    
+    console.log(vector);
   }
 }
 
@@ -115,12 +115,12 @@ canvas.addEventListener("click", function(e) {
   const ratio = 1/Math.sqrt(xDist*xDist, yDist*yDist);
   const vector = [xDist*ratio, rDist*ratio];
   
-  console.log(vector);
-  if(player.weapon = "fist") {
-    player.punch(vector);
-  } else {
+  // console.log(vector);
+  // if(player.weapon = "fist") {
+  //   player.punch(vector);
+  // } else {
     player.shoot(vector);
-  }
+  // }
 });
 
 document.addEventListener("keydown", function(e) {
