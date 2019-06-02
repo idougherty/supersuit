@@ -140,7 +140,6 @@ class Player {
       isCollidingCircle(cursorX, cursorY, 32, enemy.x, enemy.y, enemy.radius)
     );
   }
-
   shoot(vector) {
       game.bullets.push(new Bullet(this.x, this.y, vector, "player"));
       this.weapon = "fist";
