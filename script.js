@@ -64,6 +64,15 @@ class Player {
     c.fillRect(this.x, this.y, this.width, this.height);
   }
 
+  respawn() {
+    console.log(game.levels)
+    game.newObstacles(game.levels[game.currentLevel]);
+    this.x = game.entranceX;
+    this.y = game.entranceY;
+    this.vx = 0;
+    this.vy = 0;
+  }
+  
   calculateCollisions() {
     if (this.weapon != "gun") {
       removeIf(game.weapons, weapon => {
@@ -339,11 +348,13 @@ class Gamestate {
   constructor() {
     this.speed = 1;
     this.currentLevel = 0;
-    this.enemies = [new Crachead(10, 10)];
+    this.enemies = [];
     this.obstacles = [];
     this.weapons = [];
     this.bullets = [];
     this.levels = [];
+    this.entranceX = 0;
+    this.entranceY = 0;
   }
 
   newObstacles(layout) {
@@ -367,8 +378,11 @@ class Gamestate {
             new obstacles[obstacle](x * TILE_SIZE, y * TILE_SIZE)
           );
         } else if(obstacle in enemies) {
-            this.enemies.push(new enemies[obstacle] (x * TILE_SIZE, y * TILE_SIZE))
-        } else if (obstacle !== " ") {
+          this.enemies.push(new enemies[obstacle] (x * TILE_SIZE, y * TILE_SIZE))
+        } else if(obstacle == "e") {
+          this.entranceX = x * TILE_SIZE;
+          this.entranceY = y * TILE_SIZE;
+        } else if(obstacle !== " ") {
           console.error("unknown obstacle:", obstacle);
         }
       });
@@ -396,24 +410,23 @@ const player = new Player();
 window.game = game;
 window.player = player;
 
-game.newObstacles([
-  [" ", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", "t", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", "b", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
-]);
 game.weapons.push(new Weapon(64, 64, true));
 
 game.loop();
-game.levels.push([[" ", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
+game.levels.push([[["h", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", "e", " ", " ", " ", " ", " ", " ", " "],
+                ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", "t", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", "b", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+                [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]],
+
+                [" ", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
                 [" ", " ", " ", " ", " ", " ", " ", " ", " ", "g", " ", " "],
                 [" ", " ", "f", " ", " ", " ", " ", " ", " ", " ", " ", " "],
                 [" ", " ", " ", " ", "w", " ", "c", " ", " ", " ", " ", " "],
@@ -477,3 +490,5 @@ game.levels.push([[" ", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
                 ["c", " ", " ", "c", " ", " ", "c", " ", " ", "c", " ", " "],
                 [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
                 [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]]);
+                
+player.respawn();
