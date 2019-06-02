@@ -1,4 +1,6 @@
 import { Bullet } from "./bullet.js";
+import { Trapdoor } from "./trapdoor.js";
+import { isCollidingRectEntities } from "./util.js";
 
 export class Enemy {
   constructor(x, y) {
@@ -50,8 +52,24 @@ export class Crachead extends Enemy {
       (player.x - this.x) / dist,
       (player.y - this.y) / dist
     ];
+
     this.x += direction_vector[0] * 4;
+
+    for (const obs of game.obstacles) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(this, obs)) {
+        this.x -= direction_vector[0] * 4;
+        this.vx = 0;
+      }
+    }
+
     this.y += direction_vector[1] * 4;
+
+    for (const obs of game.obstacles) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(this, obs)) {
+        this.y -= direction_vector[1] * 4;
+        this.vy = 0;
+      }
+    }
   }
 }
 
@@ -59,7 +77,7 @@ export class GuyThatShootsYou extends Enemy {
   constructor(x, y) {
     super(x, y);
     this.texture = "";
-    this.reload = 10
+    this.reload = 10;
   }
 
   update(player, game) {
@@ -70,8 +88,8 @@ export class GuyThatShootsYou extends Enemy {
       (player.y - this.y) / dist
     ];
     if (this.reload <= 0) {
-      game.bullets.push(new Bullet(this.x, this.y, direction_vector, "enemy"));
-      this.reload = 25
+      game.bullets.push(new Bullet(this.x + this.width/2, this.y + this.height/2, direction_vector, "enemy"));
+      this.reload = 25;
     }
   }
 }

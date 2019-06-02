@@ -65,6 +65,9 @@ class Player {
   }
 
   respawn() {
+    game.enemies = [];
+    game.weapons = [];
+    game.bullets = [];
     game.newObstacles(game.levels[game.currentLevel]);
     this.x = game.entranceX;
     this.y = game.entranceY;
@@ -88,6 +91,7 @@ class Player {
       if(obs instanceof Trapdoor && game.enemies.length === 0 && isCollidingRectEntities(player, obs)) {
         game.currentLevel++;
         game.newObstacles(game.levels[game.currentLevel]);
+        this.respawn();
       }
     }
     if(this.y < 0){
@@ -319,20 +323,19 @@ function draw() {
 
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
-
-  for (const obs of game.obstacles) {
-    obs.draw(c);
-  }
     
   player.draw(c);
 
   for (const entity of [
-    ...game.enemies,
+    ...game.obstacles,
     ...game.weapons,
+    ...game.enemies,
     ...game.bullets
   ]) {
     entity.draw(c);
   }
+
+  player.draw(c);
 
   drawCursor(c);
 
