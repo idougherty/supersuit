@@ -10,6 +10,11 @@ export class Weapon {
   }
 
   draw(c) {
+    if(this.loaded) {
+      c.globalAlpha = 1;
+    } else {
+      c.globalAlpha = 0.4;
+    }
     c.fillStyle = "blue";
     c.beginPath();
     c.arc(
@@ -20,5 +25,6 @@ export class Weapon {
       2 * Math.PI
     );
     c.fill();
+    c.globalAlpha = 1;
   }
 }
