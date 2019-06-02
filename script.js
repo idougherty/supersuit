@@ -3,7 +3,7 @@ import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
 import { Bookshelf } from "./bookshelf.js";
-import { removeIf, isCollidingCircle } from "./util.js";
+import { removeIf, isCollidingCircle, isCollidingRect } from "./util.js";
 import { Weapon } from "./weapon.js";
 
 var canvas = document.getElementById("canvas");
@@ -92,8 +92,23 @@ class Player {
     }
 
     this.x += this.vx;
+    
+    for(const obs of game.obstacles) {
+      if(isCollidingRect(player.x, player.y, player.width, player.height, obs.x, obs.y, obs.width, obs.height)) {
+        this.x -= this.vx;
+        this.vx = 0;
+      }
+    }
+    
     this.y += this.vy;
 
+    for(const obs of game.obstacles) {
+      if(isCollidingRect(player.x, player.y, player.width, player.height, obs.x, obs.y, obs.width, obs.height)) {
+        this.y -= this.vy;
+        this.vy = 0;
+      }
+    }
+    
     this.calculateCollisions();
     calculateCursorCoords();
   }
