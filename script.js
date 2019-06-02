@@ -293,21 +293,21 @@ class Gamestate {
   newObstacles(layout) {
     this.obstacles = [];
 
-    for (const row of layout) {
-      for (const obstacle of row) {
-        const mapping = {
+    layout.forEach((row, y) => {
+      row.forEach((obstacle, x) => {
+        const obstacles = {
           c: Crate,
           b: Bookshelf,
           f: FireBarrel,
           w: Wall
         };
-        if (obstacle in mapping) {
-          this.obstacles.push(new mapping[obstacle](x * 64, y * 64)());
-        } else {
+        if (obstacle in obstacles) {
+          this.obstacles.push(new obstacles[obstacle](x * 64, y * 64));
+        } else if (obstacle !== " ") {
           console.error("unknown obstacle:", obstacle);
         }
-      }
-    }
+      });
+    });
   }
 
   update() {
