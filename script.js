@@ -74,6 +74,23 @@ class Player {
         return shouldPickUp;
       });
     }
+    
+    if(this.y < 0){
+      this.y = 0;
+      this.vy = 0;
+    }
+    if(this.y + this.height > c.height){
+      this.y = c.height - this.height;
+      this.vy = 0;
+    }
+    if(this.x < 0){
+      this.x = 0;
+      this.vx = 0;
+    }
+    if(this.x + this.width > c.width){
+      this.x = c.width - this.width;
+      this.vx = 0;
+    }
   }
 
   update() {
