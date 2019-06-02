@@ -1,4 +1,8 @@
 import { Crachead } from "./enemies.js";
+import { Crate } from "./crate.js";
+import { Wall } from "./wall.js";
+import { FireBarrel } from "./firebarrel.js";
+import { Bookshelf } from "./bookshelf.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -106,7 +110,7 @@ class Player {
   }
 
   shoot(vector) {
-    console.log(vector);
+    
   }
 }
 
@@ -115,13 +119,12 @@ canvas.addEventListener("click", function(e) {
   const yDist = player.y + player.height / 2 - e.layerY;
   const ratio = 1 / Math.sqrt(xDist * xDist + yDist * yDist);
   const vector = [xDist * ratio, yDist * ratio];
-
-  // console.log(vector);
-  // if(player.weapon = "fist") {
-  //   player.punch(vector);
-  // } else {
-  player.shoot(vector);
-  // }
+ 
+  if(player.weapon = "fist") {
+    player.punch(vector);
+  } else {
+    player.shoot(vector);
+  }
 });
 
 document.addEventListener("keydown", function(e) {
@@ -211,6 +214,35 @@ class Gamestate {
   constructor() {
     this.speed = 1;
     this.enemies = [new Crachead(10, 10)];
+    this.obstacles = [];
+  }
+  newObstacles(layout) {
+    this.obstacles = [];
+    
+    for (let y = 0; y < layout.length; y++) {
+      for (let x = 0; x < layout.length; x++) {
+        switch (layout[y][x]) {
+          case "c": //crate
+            this.obstacles.push(new Crate(x * 64, y * 64));
+            break;
+
+          case "b": //bookshelf
+            this.obstacles.push(new Bookshelf(x * 64, y * 64));
+            break;
+
+          case "f": //fire_barrel
+            this.obstacles.push(new FireBarrel(x * 64, y * 64));
+            break;
+
+          case "w": //wall
+            this.obstacles.push(new Wall(x * 64, y * 64));
+            break;
+
+          default:
+            console.log("i don't know what this is");
+        }
+      }
+    }
   }
   update() {
     this.speed =
@@ -234,5 +266,13 @@ class Gamestate {
 
 window.game = new Gamestate();
 window.player = new Player();
+game.newObstacles([[" ", " ", " ", " ", "w", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  ["c", " ", " ", " ", " ", " ", "f", " ", ],
+                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
+                  [" ", " ", " ", " ", "b", " ", " ", " ", ],]);
 
 game.loop();

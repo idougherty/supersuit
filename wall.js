@@ -1,16 +1,14 @@
-import { Obstacle } from "./obstacle.js";
-
-export class Wall extends Obstacle {
+export class Wall {
   constructor(xPos, yPos) {
     this.width = 64;
     this.height = 192;
-    this.xPos = xPos;
-    this.yPos = yPos;
+    this.x = xPos;
+    this.y = yPos;
     this.texture = "";
   }
 
   draw() {
     c.fillStyle = "#999999";
-    c.fillRect(this.xPos, this.yPos, this.width, this.height);
+    c.fillRect(this.x, this.y, this.width, this.height);
   }
 }

@@ -2,8 +2,8 @@ export class Obstacle {
   constructor() {
     this.width = w;
     this.height = h;
-    this.xPos = x;
-    this.yPos = y;
+    this.x = x;
+    this.y = y;
     this.texture = t;
   }
 }
