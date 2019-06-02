@@ -174,7 +174,7 @@ class Player {
   }
 }
 
-function calculateVector(x1, y1, x2, y2) {
+export function calculateVector(x1, y1, x2, y2) {
   const xDist = x2 - x1;
   const yDist = y2 - y1;
   const ratio = 1 / Math.sqrt(xDist ** 2 + yDist ** 2);
