@@ -5,7 +5,7 @@ export class Enemy {
     this.y = yPos;
     this.width = 32;
     this.height = 32;
-    this.radius = 16;
+    this.radius = 32;
     this.texture = "";
   }
 
