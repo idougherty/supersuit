@@ -41,6 +41,7 @@ class Player {
     this.height = 32;
     this.radius = 16;
     this.weapon = "fist";
+    this.maxSpeed = 4;
 
     this.keydown = {
       LEFT: false,
@@ -83,6 +84,12 @@ class Player {
       this.vx *= 0.7;
     }
 
+    if((this.keydown.RIGHT || this.keydown.LEFT) && (this.keydown.UP || this.keydown.DOWN)) {
+      this.maxSpeed = 2.828;
+    } else {
+      this.maxSpeed = 4;
+    }
+    
     if (this.keydown.UP && !this.keydown.DOWN) {
       this.up();
     } else if (this.keydown.DOWN && !this.keydown.UP) {
@@ -114,34 +121,34 @@ class Player {
   }
 
   left() {
-    if (this.vx > -4) {
+    if (this.vx > -this.maxSpeed) {
       this.vx -= 1;
     } else {
-      this.vx = -4;
+      this.vx = -this.maxSpeed;
     }
   }
 
   right() {
-    if (this.vx < 4) {
+    if (this.vx < this.maxSpeed) {
       this.vx += 1;
     } else {
-      this.vx = 4;
+      this.vx = this.maxSpeed;
     }
   }
 
   up() {
-    if (this.vy > -4) {
+    if (this.vy > -this.maxSpeed) {
       this.vy -= 1;
     } else {
-      this.vy = -4;
+      this.vy = -this.maxSpeed;
     }
   }
 
   down() {
-    if (this.vy < 4) {
+    if (this.vy < this.maxSpeed) {
       this.vy += 1;
     } else {
-      this.vy = 4;
+      this.vy = this.maxSpeed;
     }
   }
 
@@ -271,6 +278,10 @@ function drawCursor(c) {
 }
 
 function draw() {
+  player.update();
+
+  game.speed = 120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
+
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -325,12 +336,7 @@ class Gamestate {
     });
   }
 
-  update() {
-    this.speed =
-      120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
-
-    player.update();
-
+  update() {      
     for (const enemy of this.enemies) {
       enemy.update(player, game);
     }
