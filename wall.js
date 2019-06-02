@@ -10,8 +10,8 @@ export class Wall {
   }
 
   draw(c) {
-    //c.drawImage(texture, 0, 0);
-    c.fillStyle = "#999";
-    c.fillRect(this.x, this.y, this.width, this.height);
+    c.drawImage(this.texture, this.x, this.y, this.width, this.height);
+    //c.fillStyle = "#999";
+    ///c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
