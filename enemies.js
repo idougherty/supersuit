@@ -3,8 +3,8 @@ export class Enemy {
     this.health = 1;
     this.x = xPos;
     this.y = yPos;
-    this.width = 20;
-    this.height = 20;
+    this.width = 32;
+    this.height = 32;
     this.texture = "";
   }
 

@@ -13,7 +13,7 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-
+    
     this.vy = 2.5;
     this.size = 5;
     this.color =
@@ -35,8 +35,8 @@ class Player {
     this.y = canvas.height / 2;
     this.vx = 0;
     this.vy = 0;
-    this.width = 20;
-    this.height = 20;
+    this.width = 32;
+    this.height = 32;
     this.weapon = "fist";
 
     this.keydown = {
@@ -71,6 +71,8 @@ class Player {
 
     this.x += this.vx;
     this.y += this.vy;
+
+    calculateCursorCoords();
   }
 
   left() {
@@ -105,22 +107,26 @@ class Player {
     }
   }
 
-  punch(vector) {
-    
-  }
+  punch(vector) {}
 
-  shoot(vector) {
-    
-  }
+  shoot(vector) {}
+}
+
+function playerCenter() {
+  return [player.x + player.width / 2, player.y + player.height / 2];
+}
+
+function calculateVector(x1, y1, x2, y2) {
+  const xDist = x2 - x1;
+  const yDist = y2 - y1;
+  const ratio = 1 / Math.sqrt(xDist ** 2 + yDist ** 2);
+  return [xDist * ratio, yDist * ratio];
 }
 
 canvas.addEventListener("click", function(e) {
-  const xDist = player.x + player.width / 2 - e.layerX;
-  const yDist = player.y + player.height / 2 - e.layerY;
-  const ratio = 1 / Math.sqrt(xDist * xDist + yDist * yDist);
-  const vector = [xDist * ratio, yDist * ratio];
- 
-  if(player.weapon = "fist") {
+  if (player.weapon === "fist") {
+    const [playerX, playerY] = playerCenter();
+    const vector = calculateVector(playerX, playerY, e.layerX, e.layerY);
     player.punch(vector);
   } else {
     player.shoot(vector);
@@ -173,17 +179,39 @@ document.addEventListener("keyup", function(e) {
   }
 });
 
-window.mouseX = 0;
-window.mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
+
+function calculateCursorCoords() {
+  if (player.weapon === "fist") {
+    const [playerX, playerY] = playerCenter();
+    const xDist = mouseX - playerX;
+    const yDist = mouseY - playerY;
+    const distance = Math.sqrt(xDist ** 2 + yDist ** 2);
+    if (distance > 64) {
+      const ratio = 64 / distance;
+      cursorX = playerX + xDist * ratio;
+      cursorY = playerY + yDist * ratio;
+      return;
+    }
+  }
+  cursorX = mouseX;
+  cursorY = mouseY;
+}
+
+let mouseX = 0;
+let mouseY = 0;
 
 canvas.addEventListener("mousemove", event => {
   mouseX = event.offsetX;
   mouseY = event.offsetY;
+  calculateCursorCoords();
 });
 
+/** @param {CanvasRenderingContext2D} c */
 function drawCursor(c) {
   c.beginPath();
-  c.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
+  c.arc(cursorX, cursorY, 5, 0, Math.PI * 2);
   c.fillStyle = "#da1001";
   c.fill();
 }
@@ -191,6 +219,10 @@ function drawCursor(c) {
 function draw() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
+  
+  for (const obstacle of game.obstacles) {
+      obstacle.draw(c);
+  }
 
   player.draw(c);
   for (const enemy of game.enemies) {
@@ -218,7 +250,7 @@ class Gamestate {
   }
   newObstacles(layout) {
     this.obstacles = [];
-    
+
     for (let y = 0; y < layout.length; y++) {
       for (let x = 0; x < layout.length; x++) {
         switch (layout[y][x]) {
@@ -281,13 +313,15 @@ class Gamestate {
 
 window.game = new Gamestate();
 window.player = new Player();
-game.newObstacles([[" ", " ", " ", " ", "w", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  ["c", " ", " ", " ", " ", " ", "f", " ", ],
-                  [" ", " ", " ", " ", " ", " ", " ", " ", ],
-                  [" ", " ", " ", " ", "b", " ", " ", " ", ],]);
+game.newObstacles([
+  [" ", " ", " ", " ", "w", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  ["c", " ", " ", " ", " ", " ", "f", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", "b", " ", " ", " "]
+]);
 
 game.loop();
