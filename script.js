@@ -1,4 +1,4 @@
-import { Crachead } from "./enemies.js";
+import { Crachead, GuyThatShootsYou } from "./enemies.js";
 import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
@@ -12,6 +12,7 @@ import {
 import { Weapon } from "./weapon.js";
 import { Bullet } from "./bullet.js";
 import { TILE_SIZE } from "./constants.js";
+import { Trapdoor } from "./trapdoor.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -75,20 +76,23 @@ class Player {
       });
     }
     
+    for(const obs of game.obstacles) {
+      if(obs instanceof Trapdoor && game.enemies === [] && isCollidingRectEntities(player, obs)) {
+        
+      }
+    }
     if(this.y < 0){
       this.y = 0;
       this.vy = 0;
-    }
-    if(this.y + this.height > c.height){
-      this.y = c.height - this.height;
+    } else if(this.y + this.height > canvas.height){
+      this.y = canvas.height - this.height;
       this.vy = 0;
     }
     if(this.x < 0){
       this.x = 0;
       this.vx = 0;
-    }
-    if(this.x + this.width > c.width){
-      this.x = c.width - this.width;
+    } else if(this.x + this.width > canvas.width){
+      this.x = canvas.width - this.width;
       this.vx = 0;
     }
   }
@@ -122,7 +126,7 @@ class Player {
     this.x += this.vx;
 
     for (const obs of game.obstacles) {
-      if (typeof obs != "trapdoor" && isCollidingRectEntities(player, obs)) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(player, obs)) {
         this.x -= this.vx;
         this.vx = 0;
       }
@@ -131,7 +135,7 @@ class Player {
     this.y += this.vy;
 
     for (const obs of game.obstacles) {
-      if (typeof obs != "trapdoor" && isCollidingRectEntities(player, obs)) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(player, obs)) {
         this.y -= this.vy;
         this.vy = 0;
       }
@@ -307,10 +311,13 @@ function draw() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
 
+  for (const obs of game.obstacles) {
+    obs.draw(c);
+  }
+    
   player.draw(c);
 
   for (const entity of [
-    ...game.obstacles,
     ...game.enemies,
     ...game.weapons,
     ...game.bullets
@@ -346,7 +353,10 @@ class Gamestate {
           c: Crate,
           b: Bookshelf,
           f: FireBarrel,
-          w: Wall
+          w: Wall,
+          t: Trapdoor,
+          h: Crachead,
+          g: GuyThatShootsYou,
         };
         if (obstacle in obstacles) {
           this.obstacles.push(
@@ -386,7 +396,7 @@ game.newObstacles([
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", " ", " "],
+  ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", "t", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
