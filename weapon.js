@@ -1,8 +1,8 @@
 export class Weapon {
-  constructor(xPos, yPos, loaded, weapon = "gun") {
-    this.x = xPos;
-    this.y = yPos;
-    this.loaded = true;
+  constructor(x, y, loaded, weapon = "gun") {
+    this.x = x;
+    this.y = y;
+    this.loaded = loaded;
     this.height = 16;
     this.width = 16;
     this.radius = 8;

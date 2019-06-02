@@ -1,8 +1,8 @@
 export class Enemy {
-  constructor(xPos, yPos) {
+  constructor(x, y) {
     this.health = 1;
-    this.x = xPos;
-    this.y = yPos;
+    this.x = x;
+    this.y = y;
     this.width = 32;
     this.height = 32;
     this.radius = 16;
@@ -18,8 +18,8 @@ export class Enemy {
 }
 
 export class Crachead extends Enemy {
-  constructor(xPos, yPos) {
-    super(xPos, yPos);
+  constructor(x, y) {
+    super(x, y);
     this.texture = "";
   }
 
@@ -35,8 +35,8 @@ export class Crachead extends Enemy {
 }
 
 export class GuyThatShootsYou extends Enemy {
-  constructor(xPos, yPos) {
-    super(xPos, yPos);
+  constructor(x, y) {
+    super(x, y);
     this.texture = "";
   }
 

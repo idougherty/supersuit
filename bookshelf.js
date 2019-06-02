@@ -1,9 +1,11 @@
+import { TILE_SIZE } from "./constants.js";
+
 export class Bookshelf {
-  constructor(xPos, yPos) {
-    this.width = 256;
-    this.height = 64;
-    this.xPos = xPos;
-    this.yPos = yPos;
+  constructor(x, y) {
+    this.width = 4 * TILE_SIZE;
+    this.height = TILE_SIZE;
+    this.x = x;
+    this.y = y;
     this.texture = "";
   }
 

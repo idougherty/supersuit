@@ -11,6 +11,7 @@ import {
 } from "./util.js";
 import { Weapon } from "./weapon.js";
 import { Bullet } from "./bullet.js";
+import { TILE_SIZE } from "./constants.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -39,8 +40,8 @@ class Particle {
 
 class Player {
   constructor() {
-    this.x = canvas.width / 2;
-    this.y = canvas.height / 2;
+    this.x = canvas.width / 3;
+    this.y = canvas.height / 3;
     this.vx = 0;
     this.vy = 0;
     this.width = 32;
@@ -329,7 +330,9 @@ class Gamestate {
           w: Wall
         };
         if (obstacle in obstacles) {
-          this.obstacles.push(new obstacles[obstacle](x * 64, y * 64));
+          this.obstacles.push(
+            new obstacles[obstacle](x * TILE_SIZE, y * TILE_SIZE)
+          );
         } else if (obstacle !== " ") {
           console.error("unknown obstacle:", obstacle);
         }
@@ -359,14 +362,18 @@ window.game = game;
 window.player = player;
 
 game.newObstacles([
-  [" ", " ", " ", " ", "w", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  ["c", " ", " ", " ", " ", " ", "f", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", "b", " ", " ", " "]
+  [" ", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", "b", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
 ]);
 game.weapons.push(new Weapon(64, 64, true));
 

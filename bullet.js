@@ -1,9 +1,9 @@
 import { isCollidingCircleEntities, removeIf } from "./util.js";
 
 export class Bullet {
-  constructor(xPos, yPos, vector, tag) {
-    this.x = xPos;
-    this.y = yPos;
+  constructor(x, y, vector, tag) {
+    this.x = x;
+    this.y = y;
     this.radius = 2;
     this.width = 4;
     this.height = 4;
