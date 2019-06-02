@@ -1,6 +1,10 @@
 import { Bullet } from "./bullet.js";
 import { Trapdoor } from "./trapdoor.js";
-import { isCollidingRectEntities, entityCenter } from "./util.js";
+import {
+  isCollidingRectEntities,
+  entityCenter,
+  isCollidingCircleEntities
+} from "./util.js";
 import { Weapon } from "./weapon.js";
 
 export class Enemy {
@@ -71,6 +75,10 @@ export class Crachead extends Enemy {
         this.y -= direction_vector[1] * 4;
         this.vy = 0;
       }
+    }
+
+    if (isCollidingCircleEntities(this, player)) {
+      player.respawn();
     }
   }
 }
