@@ -18,6 +18,9 @@ import { Trapdoor } from "./trapdoor.js";
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
 
+c.imageSmoothingEnabled = false;
+c.mozImageSmoothingEnabled = false;
+
 var p = [];
 
 class Particle {
