@@ -319,14 +319,14 @@ const fist = document.getElementById("fist");
 const gun = document.getElementById("fist");
 /** @param {CanvasRenderingContext2D} c */
 function drawCursor(c) {
-  if(player.weapon === "fist") {
-    c.drawImage(fist, cursorX-6, cursorY-6, 12, 12);
-    if(player.punchCoolDown < 20) {
+  if (player.weapon === "fist") {
+    c.drawImage(fist, cursorX - 6, cursorY - 6, 12, 12);
+    if (player.punchCoolDown < 20) {
       c.fillStyle = "rgba(0, 0, 0, .5)";
-      c.fillRect(cursorX-6, cursorY-6, 12, 12);
+      c.fillRect(cursorX - 6, cursorY - 6, 12, 12);
     }
   } else {
-    c.drawImage(gun, cursorX-8, cursorY-2, 16, 4)
+    c.drawImage(gun, cursorX - 8, cursorY - 2, 16, 4);
   }
 }
 
@@ -351,10 +351,12 @@ function draw() {
 
   player.draw(c);
 
-  c.beginPath();
-  c.fillStyle = "darkred";
-  c.arc(mouseX, mouseY, 5, 0, 2 * Math.PI);
-  c.fill();
+  if (player.weapon === "fist") {
+    c.beginPath();
+    c.fillStyle = "darkred";
+    c.arc(mouseX, mouseY, 5, 0, 2 * Math.PI);
+    c.fill();
+  }
 
   drawCursor(c);
 
