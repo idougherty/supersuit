@@ -80,7 +80,14 @@ export class GuyThatShootsYou extends Enemy {
       (player.y - this.y) / dist
     ];
     if (this.reload <= 0) {
-      game.bullets.push(new Bullet(this.x, this.y, direction_vector, "enemy"));
+      game.bullets.push(
+        new Bullet(
+          this.x + this.width / 2,
+          this.y + this.height / 2,
+          direction_vector,
+          "enemy"
+        )
+      );
       this.reload = 25;
     }
   }
