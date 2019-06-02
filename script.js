@@ -324,6 +324,7 @@ class Gamestate {
     this.obstacles = [];
     this.weapons = [];
     this.bullets = [];
+    this.levels = [];
   }
 
   newObstacles(layout) {
