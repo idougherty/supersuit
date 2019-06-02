@@ -54,6 +54,7 @@ class Player {
     this.radius = 16;
     this.weapon = "fist";
     this.maxSpeed = 4;
+    this.punchCoolDown = 0;
 
     this.keydown = {
       LEFT: false,
@@ -120,6 +121,8 @@ class Player {
   }
 
   update() {
+    this.punchCoolDown++;
+
     if (this.keydown.LEFT && !this.keydown.RIGHT) {
       this.left();
     } else if (this.keydown.RIGHT && !this.keydown.LEFT) {
@@ -233,8 +236,9 @@ export function calculateVector(x1, y1, x2, y2) {
 }
 
 canvas.addEventListener("click", function(e) {
-  if (player.weapon === "fist") {
+  if (player.weapon === "fist" && player.punchCoolDown > 20) {
     player.punch();
+    player.punchCoolDown = 0;
   } else {
     const [playerX, playerY] = entityCenter(player);
     const vector = calculateVector(playerX, playerY, e.offsetX, e.offsetY);
