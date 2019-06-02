@@ -19,29 +19,6 @@ var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
 
 c.imageSmoothingEnabled = false;
-c.mozImageSmoothingEnabled = false;
-
-var p = [];
-
-class Particle {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-
-    this.vy = 2.5;
-    this.size = 5;
-    this.color =
-      "rgba(" + (Math.floor(Math.random() * 100) + 155) + ", 50, 30, 1)";
-  }
-
-  draw(c) {
-    c.fillStyle = this.color;
-    c.fillRect(this.x, this.y, this.size, this.size);
-  }
-  update() {
-    this.y += this.vy;
-  }
-}
 
 class Player {
   constructor() {
@@ -75,6 +52,7 @@ class Player {
     game.enemies = [];
     game.weapons = [];
     game.bullets = [];
+    game.particles = [];
     game.newObstacles(game.levels[game.currentLevel]);
     this.x = game.entranceX;
     this.y = game.entranceY;
@@ -96,10 +74,10 @@ class Player {
 
     for (const obs of game.obstacles) {
       if (obs instanceof Trapdoor) {
-        if(game.enemies.length === 0) {
+        if (game.enemies.length === 0) {
           obs.open = true;
         }
-        if(obs.open && isCollidingRectEntities(player, obs)) {
+        if (obs.open && isCollidingRectEntities(player, obs)) {
           game.currentLevel++;
           game.newObstacles(game.levels[game.currentLevel]);
           this.respawn();
@@ -334,12 +312,20 @@ canvas.addEventListener("mousemove", event => {
   calculateCursorCoords();
 });
 
+const fist = document.getElementById("fist");
 /** @param {CanvasRenderingContext2D} c */
 function drawCursor(c) {
-  c.beginPath();
-  c.arc(cursorX, cursorY, 5, 0, Math.PI * 2);
-  c.fillStyle = "#da1001";
-  c.fill();
+  //c.beginPath();
+  //c.arc(cursorX, cursorY, 5, 0, Math.PI * 2);
+  //c.fillStyle = "#da1001";
+  //c.fill();
+  if(player.punchCoolDown > 20) {
+    c.globalAlpha = 1;
+  } else {
+    c.globalAlpha = 0.4;
+  }
+  c.drawImage(fist, cursorX-6, cursorY-6, 12, 12);
+  c.globalAlpha = 1;
 }
 
 function draw() {
@@ -348,19 +334,18 @@ function draw() {
   game.speed =
     120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
 
-  c.fillStyle = `rgba(0, 0, 0, ${1 / game.speed * 15})`;
+  c.fillStyle = `rgba(0, 0, 0, ${(1 / game.speed) * 15})`;
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   for (const entity of [
     ...game.obstacles,
     ...game.weapons,
     ...game.enemies,
-    ...game.bullets
+    ...game.bullets,
+    ...game.particles
   ]) {
     entity.draw(c);
   }
-
-  
 
   player.draw(c);
 
@@ -371,8 +356,6 @@ function draw() {
 
 requestAnimationFrame(draw);
 
-p.push(new Particle(200, 0));
-
 class Gamestate {
   constructor() {
     this.speed = 1;
@@ -381,6 +364,7 @@ class Gamestate {
     this.obstacles = [];
     this.weapons = [];
     this.bullets = [];
+    this.particles = [];
     this.levels = [];
     this.entranceX = 0;
     this.entranceY = 0;
@@ -421,12 +405,12 @@ class Gamestate {
   }
 
   update() {
-    for (const entity of [...this.enemies, ...this.bullets]) {
+    for (const entity of [
+      ...this.enemies,
+      ...this.bullets,
+      ...this.particles
+    ]) {
       if (entity.update) entity.update(player, game);
-    }
-
-    for (const particle of p) {
-      particle.update();
     }
   }
   loop() {

@@ -6,6 +6,7 @@ import {
   isCollidingCircleEntities
 } from "./util.js";
 import { Weapon } from "./weapon.js";
+import { Particle } from "./particle.js";
 
 export class Enemy {
   constructor(x, y) {
@@ -19,7 +20,23 @@ export class Enemy {
 
   update(_player, _game) {}
 
-  kill(_game) {}
+  kill(game) {
+    const [centerX, centerY] = entityCenter(this);
+    const particle = () => {
+      game.particles.push(
+        new Particle(
+          centerX + (Math.random() - 1) * this.width,
+          centerY + (Math.random() - 1) * this.height
+        )
+      );
+    };
+    particle();
+    particle();
+    particle();
+    particle();
+    particle();
+    particle();
+  }
 
   draw(c) {
     c.drawImage(this.texture, this.x, this.y, this.width, this.height);
@@ -96,6 +113,7 @@ export class GuyThatShootsYou extends Enemy {
     game.weapons.push(
       new Weapon(centerX - this.width / 4, centerY - this.height / 4, true)
     );
+    super.kill(game);
   }
 
   update(player, game) {
