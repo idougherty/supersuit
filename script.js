@@ -285,30 +285,22 @@ class Gamestate {
     this.obstacles = [];
     this.weapons = [];
   }
+
   newObstacles(layout) {
     this.obstacles = [];
 
-    for (let y = 0; y < layout.length; y++) {
-      for (let x = 0; x < layout.length; x++) {
-        switch (layout[y][x]) {
-          case "c": //crate
-            this.obstacles.push(new Crate(x * 64, y * 64));
-            break;
-
-          case "b": //bookshelf
-            this.obstacles.push(new Bookshelf(x * 64, y * 64));
-            break;
-
-          case "f": //fire_barrel
-            this.obstacles.push(new FireBarrel(x * 64, y * 64));
-            break;
-
-          case "w": //wall
-            this.obstacles.push(new Wall(x * 64, y * 64));
-            break;
-
-          default:
-            console.log("i don't know what this is");
+    for (const row of layout) {
+      for (const obstacle of row) {
+        const mapping = {
+          c: Crate,
+          b: Bookshelf,
+          f: FireBarrel,
+          w: Wall
+        };
+        if (obstacle in mapping) {
+          this.obstacles.push(new mapping[obstacle](x * 64, y * 64)());
+        } else {
+          console.error("unknown obstacle:", obstacle);
         }
       }
     }
