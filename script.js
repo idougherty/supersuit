@@ -77,7 +77,7 @@ class Player {
     }
     
     for(const obs of game.obstacles) {
-      if(obs instanceof Trapdoor && obs.open && isCollidingRectEntities(player, obs)) {
+      if(obs instanceof Trapdoor && game.enemies === [] && isCollidingRectEntities(player, obs)) {
         
       }
     }

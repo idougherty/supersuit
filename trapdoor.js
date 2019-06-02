@@ -6,7 +6,6 @@ export class Trapdoor {
     this.y = y;
     this.height = TILE_SIZE;
     this.width = TILE_SIZE;
-    this.open = false;
   }
 
   draw(c) {
