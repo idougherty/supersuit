@@ -7,7 +7,8 @@ import {
   removeIf,
   isCollidingCircle,
   isCollidingCircleEntities,
-  isCollidingRectEntities
+  isCollidingRectEntities,
+  entityCenter
 } from "./util.js";
 import { Weapon } from "./weapon.js";
 import { Bullet } from "./bullet.js";
@@ -191,18 +192,23 @@ class Player {
   }
   //uwu
 
-  center() {
-    return [this.x + this.width / 2, this.y + this.height / 2];
-  }
-
   punch() {
-    removeIf(game.enemies, enemy =>
-      isCollidingCircle(cursorX, cursorY, 32, enemy.x, enemy.y, enemy.radius)
-    );
+    removeIf(game.enemies, enemy => {
+      const isColliding = isCollidingCircle(
+        cursorX,
+        cursorY,
+        32,
+        enemy.x,
+        enemy.y,
+        enemy.radius
+      );
+      if (isColliding) enemy.kill(game);
+      return isColliding;
+    });
   }
 
   shoot(vector) {
-    const [centerX, centerY] = this.center();
+    const [centerX, centerY] = entityCenter(this);
     game.bullets.push(new Bullet(centerX, centerY, vector, "player"));
     this.weapon = "fist";
     game.weapons.push(
@@ -222,7 +228,7 @@ canvas.addEventListener("click", function(e) {
   if (player.weapon === "fist") {
     player.punch();
   } else {
-    const [playerX, playerY] = player.center();
+    const [playerX, playerY] = entityCenter(player);
     const vector = calculateVector(playerX, playerY, e.offsetX, e.offsetY);
     player.shoot(vector);
   }
@@ -286,7 +292,7 @@ let cursorY = 0;
 
 function calculateCursorCoords() {
   if (player.weapon === "fist") {
-    const [playerX, playerY] = player.center();
+    const [playerX, playerY] = entityCenter(player);
     const xDist = mouseX - playerX;
     const yDist = mouseY - playerY;
     const distance = Math.sqrt(xDist ** 2 + yDist ** 2);
