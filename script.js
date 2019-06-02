@@ -3,8 +3,15 @@ import { Crate } from "./crate.js";
 import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
 import { Bookshelf } from "./bookshelf.js";
-import { removeIf } from "./util.js";
+import {
+  removeIf,
+  isCollidingCircle,
+  isCollidingCircleEntities,
+  isCollidingRectEntities
+} from "./util.js";
 import { Weapon } from "./weapon.js";
+import { Bullet } from "./bullet.js";
+import { TILE_SIZE } from "./constants.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -33,13 +40,15 @@ class Particle {
 
 class Player {
   constructor() {
-    this.x = canvas.width / 2;
-    this.y = canvas.height / 2;
+    this.x = canvas.width / 3;
+    this.y = canvas.height / 3;
     this.vx = 0;
     this.vy = 0;
     this.width = 32;
     this.height = 32;
+    this.radius = 16;
     this.weapon = "fist";
+    this.maxSpeed = 4;
 
     this.keydown = {
       LEFT: false,
@@ -53,25 +62,20 @@ class Player {
     c.fillStyle = "white";
     c.fillRect(this.x, this.y, this.width, this.height);
   }
-<<<<<<< HEAD
-  
+
   calculateCollisions() {
-    if(this.weapon != "gun") {
-      for(int i = 0; i < Gamestate.weapons.size(); i++){
-        if(this.collision == Gamestate.weapons[i]){
-          this.weapon = Gamestate.weapons[i];
-          Gamestate.weapons.splice(i, 1);
-          break;
+    if (this.weapon != "gun") {
+      removeIf(game.weapons, weapon => {
+        const shouldPickUp =
+          weapon.loaded && isCollidingCircleEntities(this, weapon);
+        if (shouldPickUp) {
+          this.weapon = weapon.weapon;
         }
-      }
+        return shouldPickUp;
+      });
     }
   }
-  
-=======
 
-  calculateCollisions() {}
-
->>>>>>> b2d9fe0c16f3e59c8609a8c14973dc8f8bfd3775
   update() {
     if (this.keydown.LEFT && !this.keydown.RIGHT) {
       this.left();
@@ -79,6 +83,15 @@ class Player {
       this.right();
     } else {
       this.vx *= 0.7;
+    }
+
+    if (
+      (this.keydown.RIGHT || this.keydown.LEFT) &&
+      (this.keydown.UP || this.keydown.DOWN)
+    ) {
+      this.maxSpeed = 2.828;
+    } else {
+      this.maxSpeed = 4;
     }
 
     if (this.keydown.UP && !this.keydown.DOWN) {
@@ -90,69 +103,82 @@ class Player {
     }
 
     this.x += this.vx;
+
+    for (const obs of game.obstacles) {
+      if (isCollidingRectEntities(player, obs)) {
+        this.x -= this.vx;
+        this.vx = 0;
+      }
+    }
+
     this.y += this.vy;
+
+    for (const obs of game.obstacles) {
+      if (isCollidingRectEntities(player, obs)) {
+        this.y -= this.vy;
+        this.vy = 0;
+      }
+    }
 
     this.calculateCollisions();
     calculateCursorCoords();
   }
 
   left() {
-    if (this.vx > -4) {
+    if (this.vx > -this.maxSpeed) {
       this.vx -= 1;
     } else {
-      this.vx = -4;
+      this.vx = -this.maxSpeed;
     }
   }
 
   right() {
-    if (this.vx < 4) {
+    if (this.vx < this.maxSpeed) {
       this.vx += 1;
     } else {
-      this.vx = 4;
+      this.vx = this.maxSpeed;
     }
   }
 //iwi
   up() {
-    if (this.vy > -4) {
+    if (this.vy > -this.maxSpeed) {
       this.vy -= 1;
     } else {
-      this.vy = -4;
+      this.vy = -this.maxSpeed;
     }
   }
 
   down() {
-    if (this.vy < 4) {
+    if (this.vy < this.maxSpeed) {
       this.vy += 1;
     } else {
-      this.vy = 4;
+      this.vy = this.maxSpeed;
     }
   }
+<<<<<<< HEAD
 <<<<<<< HEAD
   
   //uwu
   punch(vector) {
 =======
+=======
+>>>>>>> 04adb2b6c9f8ff7ebae8e35427f53ec46039390c
 
   center() {
     return [this.x + this.width / 2, this.y + this.height / 2];
->>>>>>> b2d9fe0c16f3e59c8609a8c14973dc8f8bfd3775
   }
 
   punch() {
-    console.log("owo");
     removeIf(game.enemies, enemy =>
-      game.isCollidingCircle(
-        cursorX,
-        cursorY,
-        32,
-        enemy.x,
-        enemy.y,
-        enemy.radius
-      )
+      isCollidingCircle(cursorX, cursorY, 32, enemy.x, enemy.y, enemy.radius)
     );
   }
 
-  shoot(vector) {}
+  shoot(vector) {
+    game.bullets.push(new Bullet(this.x, this.y, vector, "player"));
+    this.weapon = "fist";
+    game.weapons.push(new Weapon(this.x, this.y, false));
+  }
 }
 
 function calculateVector(x1, y1, x2, y2) {
@@ -167,50 +193,57 @@ canvas.addEventListener("click", function(e) {
     player.punch();
   } else {
     const [playerX, playerY] = player.center();
-    const vector = calculateVector(playerX, playerY, e.layerX, e.layerY);
+    const vector = calculateVector(playerX, playerY, e.offsetX, e.offsetY);
     player.shoot(vector);
   }
 });
 
 document.addEventListener("keydown", function(e) {
-  switch (e.keyCode) {
-    case 37: //left
+  switch (e.code) {
+    case "KeyA":
+    case "ArrowLeft":
       player.keydown.LEFT = true;
       break;
 
-    case 38: //up
+    case "KeyW":
+    case "ArrowUp":
       player.keydown.UP = true;
       break;
 
-    case 39: //right
+    case "KeyD":
+    case "ArrowRight":
       player.keydown.RIGHT = true;
       break;
 
-    case 40: //down
+    case "KeyS":
+    case "ArrowDown":
       player.keydown.DOWN = true;
       break;
 
     default:
       return;
   }
-  game.update();
 });
 
 document.addEventListener("keyup", function(e) {
-  switch (e.keyCode) {
-    case 37: //left
+  switch (e.code) {
+    case "KeyA":
+    case "ArrowLeft":
       player.keydown.LEFT = false;
       break;
 
-    case 38: //up
+    case "KeyW":
+    case "ArrowUp":
       player.keydown.UP = false;
       break;
 
-    case 39: //right
+    case "KeyD":
+    case "ArrowRight":
       player.keydown.RIGHT = false;
       break;
 
-    case 40: //down
+    case "KeyS":
+    case "ArrowDown":
       player.keydown.DOWN = false;
       break;
 
@@ -256,20 +289,23 @@ function drawCursor(c) {
 }
 
 function draw() {
+  player.update();
+
+  game.speed =
+    120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
+
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (const obstacle of game.obstacles) {
-    obstacle.draw(c);
-  }
-
   player.draw(c);
-  for (const enemy of game.enemies) {
-    enemy.draw(c);
-  }
 
-  for (const weapon of game.weapons) {
-    weapon.draw(c);
+  for (const entity of [
+    ...game.obstacles,
+    ...game.enemies,
+    ...game.weapons,
+    ...game.bullets
+  ]) {
+    entity.draw(c);
   }
 
   drawCursor(c);
@@ -287,52 +323,34 @@ class Gamestate {
     this.enemies = [new Crachead(10, 10)];
     this.obstacles = [];
     this.weapons = [];
+    this.bullets = [];
   }
+
   newObstacles(layout) {
     this.obstacles = [];
 
-    for (let y = 0; y < layout.length; y++) {
-      for (let x = 0; x < layout.length; x++) {
-        switch (layout[y][x]) {
-          case "c": //crate
-            this.obstacles.push(new Crate(x * 64, y * 64));
-            break;
-
-          case "b": //bookshelf
-            this.obstacles.push(new Bookshelf(x * 64, y * 64));
-            break;
-
-          case "f": //fire_barrel
-            this.obstacles.push(new FireBarrel(x * 64, y * 64));
-            break;
-
-          case "w": //wall
-            this.obstacles.push(new Wall(x * 64, y * 64));
-            break;
-
-          default:
-            console.log("i don't know what this is");
+    layout.forEach((row, y) => {
+      row.forEach((obstacle, x) => {
+        const obstacles = {
+          c: Crate,
+          b: Bookshelf,
+          f: FireBarrel,
+          w: Wall
+        };
+        if (obstacle in obstacles) {
+          this.obstacles.push(
+            new obstacles[obstacle](x * TILE_SIZE, y * TILE_SIZE)
+          );
+        } else if (obstacle !== " ") {
+          console.error("unknown obstacle:", obstacle);
         }
-      }
-    }
-  }
-
-  isCollidingCircle(x1, y1, r1, x2, y2, r2) {
-    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) <= r1 + r2;
-  }
-
-  isCollidingRect(x1, y1, w1, h1, x2, y2, w2, h2) {
-    return x1 + w1 > x2 && y1 + h1 > y2 && x1 < x2 + w2 && y1 < y2 + h2;
+      });
+    });
   }
 
   update() {
-    this.speed =
-      120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
-
-    player.update();
-
-    for (const enemy of this.enemies) {
-      enemy.update();
+    for (const entity of [...this.enemies, ...this.bullets]) {
+      entity.update(player, game);
     }
 
     for (const particle of p) {
@@ -352,15 +370,19 @@ window.game = game;
 window.player = player;
 
 game.newObstacles([
-  [" ", " ", " ", " ", "w", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  ["c", " ", " ", " ", " ", " ", "f", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", "b", " ", " ", " "]
+  [" ", " ", " ", " ", "w", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  ["c", " ", " ", " ", " ", " ", "f", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", "b", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
 ]);
-game.weapons.push(new Weapon(64, 64));
+game.weapons.push(new Weapon(64, 64, true));
 
 game.loop();

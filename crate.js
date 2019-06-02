@@ -1,9 +1,11 @@
+import { TILE_SIZE } from "./constants.js";
+
 export class Crate {
-  constructor(xPos, yPos) {
-    this.width = 192;
-    this.height = 192;
-    this.x = xPos;
-    this.y = yPos;
+  constructor(x, y) {
+    this.width = 3 * TILE_SIZE;
+    this.height = 3 * TILE_SIZE;
+    this.x = x;
+    this.y = y;
     this.texture = "";
   }
 

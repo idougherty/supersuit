@@ -1,9 +1,11 @@
+import { TILE_SIZE } from "./constants.js";
+
 export class FireBarrel {
-  constructor(xPos, yPos) {
-    this.width = 64;
-    this.height = 64;
-    this.x = xPos;
-    this.y = yPos;
+  constructor(x, y) {
+    this.width = TILE_SIZE;
+    this.height = TILE_SIZE;
+    this.x = x;
+    this.y = y;
     this.texture = "";
   }
 
