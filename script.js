@@ -92,14 +92,15 @@ class Player {
     }
 
     for (const obs of game.obstacles) {
-      if (
-        obs instanceof Trapdoor &&
-        game.enemies.length === 0 &&
-        isCollidingRectEntities(player, obs)
-      ) {
-        game.currentLevel++;
-        game.newObstacles(game.levels[game.currentLevel]);
-        this.respawn();
+      if (obs instanceof Trapdoor) {
+        if(game.enemies.length === 0) {
+          obs.open = true;
+        }
+        if(obs.open && isCollidingRectEntities(player, obs)) {
+          game.currentLevel++;
+          game.newObstacles(game.levels[game.currentLevel]);
+          this.respawn();
+        }
       }
     }
     if (this.y < 0) {
@@ -411,7 +412,7 @@ class Gamestate {
 
   update() {
     for (const entity of [...this.enemies, ...this.bullets]) {
-      entity.update(player, game);
+      if (entity.update) entity.update(player, game);
     }
 
     for (const particle of p) {
