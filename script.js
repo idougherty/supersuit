@@ -16,6 +16,7 @@ import { TILE_SIZE } from "./constants.js";
 import { Trapdoor } from "./trapdoor.js";
 
 var canvas = document.getElementById("canvas");
+/** @type {CanvasRenderingContext2D} */
 var c = canvas.getContext("2d");
 
 c.imageSmoothingEnabled = false;
@@ -220,9 +221,11 @@ export function calculateVector(x1, y1, x2, y2) {
 }
 
 canvas.addEventListener("click", function(e) {
-  if (player.weapon === "fist" && player.punchCoolDown > 20) {
-    player.punch();
-    player.punchCoolDown = 0;
+  if (player.weapon === "fist") {
+    if (player.punchCoolDown > 20) {
+      player.punch();
+      player.punchCoolDown = 0;
+    }
   } else {
     const [playerX, playerY] = entityCenter(player);
     const vector = calculateVector(playerX, playerY, e.offsetX, e.offsetY);
@@ -348,6 +351,11 @@ function draw() {
   }
 
   player.draw(c);
+
+  c.beginPath();
+  c.fillStyle = "darkred";
+  c.arc(mouseX, mouseY, 5, 0, 2 * Math.PI);
+  c.fill();
 
   drawCursor(c);
 
@@ -517,20 +525,32 @@ game.levels.push(
   ]
 );
 
-c.drawImage(document.getElementById("title"), 0, 0, canvas.width, canvas.height);
-let startImage = "title"
+c.drawImage(
+  document.getElementById("title"),
+  0,
+  0,
+  canvas.width,
+  canvas.height
+);
+let startImage = "title";
 canvas.addEventListener("click", function listener() {
   switch (startImage) {
     case "title":
       startImage = "explain";
-      c.drawImage(document.getElementById("explain"), 0, 0, canvas.width, canvas.height);
-      break
+      c.drawImage(
+        document.getElementById("explain"),
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      break;
     case "explain":
-      canvas.removeEventListener("click",listener)
+      canvas.removeEventListener("click", listener);
       startGame();
-      break
+      break;
   }
-})
+});
 function startGame() {
   requestAnimationFrame(draw);
   game.loop();
