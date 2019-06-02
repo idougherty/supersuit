@@ -12,7 +12,7 @@ export class Bullet {
     this.width = 4;
     this.height = 4;
     this.vector = vector;
-    this.speed = 5;
+    this.speed = 10;
     this.tag = tag;
   }
 
@@ -32,9 +32,7 @@ export class Bullet {
     
     if (this.tag == "enemy"){
         if (isCollidingCircleEntities(this, player)) {
-            alert(
-                "bad"
-            );
+            player.respawn();
         }
     }
     if (this.tag == "player") {
