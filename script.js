@@ -4,6 +4,7 @@ import { Wall } from "./wall.js";
 import { FireBarrel } from "./firebarrel.js";
 import { Bookshelf } from "./bookshelf.js";
 import { removeIf } from "./util.js";
+import { Weapon } from "./weapon.js";
 
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
@@ -53,6 +54,8 @@ class Player {
     c.fillRect(this.x, this.y, this.width, this.height);
   }
 
+  calculateCollisions() {}
+
   update() {
     if (this.keydown.LEFT && !this.keydown.RIGHT) {
       this.left();
@@ -73,6 +76,7 @@ class Player {
     this.x += this.vx;
     this.y += this.vy;
 
+    this.calculateCollisions();
     calculateCursorCoords();
   }
 
@@ -242,8 +246,8 @@ function draw() {
     enemy.draw(c);
   }
 
-  for (const particle of p) {
-    particle.update(c);
+  for (const weapon of game.weapons) {
+    weapon.draw(c);
   }
 
   drawCursor(c);
@@ -260,6 +264,7 @@ class Gamestate {
     this.speed = 1;
     this.enemies = [new Crachead(10, 10)];
     this.obstacles = [];
+    this.weapons = [];
   }
   newObstacles(layout) {
     this.obstacles = [];
@@ -291,8 +296,11 @@ class Gamestate {
   }
 
   isCollidingCircle(x1, y1, r1, x2, y2, r2) {
-    const z = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-    return z <= r1 + r2;
+    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) <= r1 + r2;
+  }
+
+  isCollidingRect(x1, y1, w1, h1, x2, y2, w2, h2) {
+    return x1 + w1 > x2 && y1 + h1 > y2 && x1 < x2 + w2 && y1 < y2 + h2;
   }
 
   update() {
@@ -331,5 +339,6 @@ game.newObstacles([
   [" ", " ", " ", " ", " ", " ", " ", " "],
   [" ", " ", " ", " ", "b", " ", " ", " "]
 ]);
+game.weapons.push(new Weapon(64, 64));
 
 game.loop();
