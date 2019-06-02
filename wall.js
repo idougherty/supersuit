@@ -6,11 +6,11 @@ export class Wall {
     this.height = 3 * TILE_SIZE;
     this.x = x;
     this.y = y;
-    this.texture = "";
+    this.texture = "wall.png";
   }
 
   draw(c) {
-    c.fillStyle = "#999";
+    c.drawImage(texture, 0, 0);
     c.fillRect(this.x, this.y, this.width, this.height);
   }
 }
