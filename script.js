@@ -337,7 +337,7 @@ function draw() {
   game.speed =
     120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
 
-  c.fillStyle = "black";
+  c.fillStyle = `rgba(0, 0, 0, ${1 / game.speed * 15})`;
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   for (const entity of [
@@ -348,6 +348,8 @@ function draw() {
   ]) {
     entity.draw(c);
   }
+
+  
 
   player.draw(c);
 
