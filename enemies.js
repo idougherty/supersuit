@@ -1,3 +1,5 @@
+import { Bullet } from "./bullet";
+
 export class Enemy {
   constructor(x, y) {
     this.health = 1;
@@ -46,5 +48,6 @@ export class GuyThatShootsYou extends Enemy {
       (player.x - this.x) / dist,
       (player.y - this.y) / dist
     ];
+    game.bullets.push(new Bullet(this.x, this.y, direction_vector, "enemy"));
   }
 }
