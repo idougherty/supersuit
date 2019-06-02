@@ -198,7 +198,7 @@ class Player {
   }
 
   shoot(vector) {
-    game.bullets.push(new Bullet(this.x, this.y, vector, "player"));
+    game.bullets.push(new Bullet(this.x + this.width/2, this.y + this.height/2, vector, "player"));
     this.weapon = "fist";
     game.weapons.push(new Weapon(this.x, this.y, false));
   }
