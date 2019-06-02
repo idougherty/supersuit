@@ -101,7 +101,9 @@ class Player {
     }
   }
 
-  punch(vector) {}
+  punch(vector) {
+    
+  }
 
   shoot(vector) {
     console.log(vector);
