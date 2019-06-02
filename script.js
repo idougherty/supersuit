@@ -71,6 +71,8 @@ class Player {
 
     this.x += this.vx;
     this.y += this.vy;
+
+    calculateCursorCoords();
   }
 
   left() {
@@ -180,11 +182,11 @@ document.addEventListener("keyup", function(e) {
 let cursorX = 0;
 let cursorY = 0;
 
-canvas.addEventListener("mousemove", event => {
+function calculateCursorCoords() {
   if (player.weapon === "fist") {
     const [playerX, playerY] = playerCenter();
-    const xDist = event.offsetX - playerX;
-    const yDist = event.offsetY - playerY;
+    const xDist = mouseX - playerX;
+    const yDist = mouseY - playerY;
     const distance = Math.sqrt(xDist ** 2 + yDist ** 2);
     if (distance > 64) {
       const ratio = 64 / distance;
@@ -193,8 +195,17 @@ canvas.addEventListener("mousemove", event => {
       return;
     }
   }
-  cursorX = event.offsetX;
-  cursorY = event.offsetY;
+  cursorX = mouseX;
+  cursorY = mouseY;
+}
+
+let mouseX = 0;
+let mouseY = 0;
+
+canvas.addEventListener("mousemove", event => {
+  mouseX = event.offsetX;
+  mouseY = event.offsetY;
+  calculateCursorCoords();
 });
 
 /** @param {CanvasRenderingContext2D} c */
