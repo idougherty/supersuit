@@ -15,9 +15,10 @@ export function loadImageNow(src) {
 export function loadImage(src) {
   const img = new Image();
   img.src = "data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-  setTimeout(() => {
+  // once everything on the page is loaded and ready we can start loading assets
+  window.addEventListener("load", () => {
     img.src = src;
     images.push(imageProm(img));
-  }, 100);
+  });
   return img;
 }
