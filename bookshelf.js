@@ -1,4 +1,7 @@
 import { TILE_SIZE } from "./constants.js";
+import { loadImage } from "./img.js";
+
+const bookshelfTexture = loadImage("art/bookshelf.png");
 
 export class Bookshelf {
   constructor(x, y) {
@@ -6,7 +9,7 @@ export class Bookshelf {
     this.height = TILE_SIZE;
     this.x = x;
     this.y = y;
-    this.texture = document.getElementById("bookshelf");
+    this.texture = bookshelfTexture;
   }
 
   draw(c) {

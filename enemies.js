@@ -7,6 +7,7 @@ import {
 } from "./util.js";
 import { Weapon } from "./weapon.js";
 import { Particle } from "./particle.js";
+import { loadImage } from "./img.js";
 
 export class Enemy {
   constructor(x, y) {
@@ -15,7 +16,7 @@ export class Enemy {
     this.width = 32;
     this.height = 32;
     this.radius = 16;
-    this.texture = "";
+    this.texture = null;
   }
 
   update(_player, _game) {}
@@ -64,10 +65,12 @@ export class Enemy {
   }
 }
 
+const cracheadTexture = loadImage("art/crackhead.png");
+
 export class Crachead extends Enemy {
   constructor(x, y) {
     super(x, y);
-    this.texture = document.getElementById("crackhead");
+    this.texture = cracheadTexture;
   }
 
   update(player, game) {
@@ -101,10 +104,12 @@ export class Crachead extends Enemy {
   }
 }
 
+const gunguyTexture = loadImage("art/gunguy.png");
+
 export class GuyThatShootsYou extends Enemy {
   constructor(x, y) {
     super(x, y);
-    this.texture = document.getElementById("gunguy");
+    this.texture = gunguyTexture;
     this.reload = 10;
   }
 

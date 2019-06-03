@@ -14,6 +14,7 @@ import { Weapon } from "./weapon.js";
 import { Bullet } from "./bullet.js";
 import { TILE_SIZE } from "./constants.js";
 import { Trapdoor } from "./trapdoor.js";
+import { images, loadImageNow, loadImage } from "./img.js";
 
 var canvas = document.getElementById("canvas");
 /** @type {CanvasRenderingContext2D} */
@@ -22,6 +23,12 @@ var c = canvas.getContext("2d");
 c.imageSmoothingEnabled = false;
 
 let win = false;
+
+const playerFront = loadImage("art/frozoefront.png");
+const playerFrontWalking = loadImage("art/frozonefronttwalk.gif");
+const playerBack = loadImage("art/frozoneback.png");
+const playerRightWalking = loadImage("art/frorightwalk.gif");
+const playerLeftWalking = loadImage("art/froleftwalk.gif");
 
 class Player {
   constructor() {
@@ -35,7 +42,7 @@ class Player {
     this.weapon = "fist";
     this.maxSpeed = 4;
     this.punchCoolDown = 0;
-    this.texture = document.getElementById("frozoefront");
+    this.texture = playerFront;
 
     this.keydown = {
       LEFT: false,
@@ -164,7 +171,7 @@ class Player {
     } else {
       this.vx = -this.maxSpeed;
     }
-    this.texture = document.getElementById("left");
+    this.texture = playerLeftWalking;
   }
 
   right() {
@@ -173,7 +180,7 @@ class Player {
     } else {
       this.vx = this.maxSpeed;
     }
-    this.texture = document.getElementById("right");
+    this.texture = playerRightWalking;
   }
   //iwi
   up() {
@@ -182,7 +189,7 @@ class Player {
     } else {
       this.vy = -this.maxSpeed;
     }
-    this.texture = document.getElementById("back");
+    this.texture = playerBack;
   }
 
   down() {
@@ -191,7 +198,7 @@ class Player {
     } else {
       this.vy = this.maxSpeed;
     }
-    this.texture = document.getElementById("frontwalk");
+    this.texture = playerFrontWalking;
   }
   //uwu
 
@@ -322,8 +329,8 @@ canvas.addEventListener("mousemove", event => {
   calculateCursorCoords();
 });
 
-const fist = document.getElementById("fist");
-const gun = document.getElementById("fist");
+const fist = loadImage("art/itsafist.png");
+const gun = loadImage("art/itsthegun.png");
 /** @param {CanvasRenderingContext2D} c */
 function drawCursor(c) {
   if (player.weapon === "fist") {
@@ -337,15 +344,11 @@ function drawCursor(c) {
   }
 }
 
+const endscreenImage = loadImage("art/endscreen.jpg");
+
 function draw() {
   if (win) {
-    c.drawImage(
-      document.getElementById("endscreen"),
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+    c.drawImage(endscreenImage, 0, 0, canvas.width, canvas.height);
     return;
   }
 
@@ -545,33 +548,30 @@ game.levels.push(
   ]
 );
 
-c.drawImage(
-  document.getElementById("title"),
-  0,
-  0,
-  canvas.width,
-  canvas.height
-);
-let startImage = "title";
-canvas.addEventListener("click", function listener() {
-  switch (startImage) {
-    case "title":
-      startImage = "explain";
-      c.drawImage(
-        document.getElementById("explain"),
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-      break;
-    case "explain":
-      canvas.removeEventListener("click", listener);
-      startGame();
-      break;
-  }
+const titleImage = loadImageNow("art/title.jpg");
+const explainImage = loadImageNow("art/explain.jpg");
+
+titleImage.then(titleImgLoaded => {
+  let startImage = "title";
+  c.drawImage(titleImgLoaded, 0, 0, canvas.width, canvas.height);
+
+  canvas.addEventListener("click", async function listener() {
+    switch (startImage) {
+      case "title":
+        startImage = "explain";
+        const explainImgLoaded = await explainImage;
+        c.drawImage(explainImgLoaded, 0, 0, canvas.width, canvas.height);
+        break;
+      case "explain":
+        canvas.removeEventListener("click", listener);
+        await startGame();
+        break;
+    }
+  });
 });
-function startGame() {
+
+async function startGame() {
+  await Promise.all(images);
   requestAnimationFrame(draw);
   game.loop();
   player.respawn();

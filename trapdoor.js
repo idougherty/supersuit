@@ -1,4 +1,8 @@
 import { TILE_SIZE } from "./constants.js";
+import { loadImage } from "./img.js";
+
+const openTexture = loadImage("art/trapdooropen.png");
+const closedTexture = loadImage("art/trapdoorclosed.png");
 
 export class Trapdoor {
   constructor(x, y) {
@@ -7,15 +11,13 @@ export class Trapdoor {
     this.height = TILE_SIZE;
     this.width = TILE_SIZE;
     this.open = false;
-    this.texture1 = document.getElementById("trapdoorO");
-    this.texture2 = document.getElementById("trapdoorC");
   }
 
   draw(c) {
     if (this.open) {
-      c.drawImage(this.texture1, this.x, this.y, this.height, this.width);
+      c.drawImage(openTexture, this.x, this.y, this.height, this.width);
     } else {
-      c.drawImage(this.texture2, this.x, this.y, this.height, this.width);
+      c.drawImage(closedTexture, this.x, this.y, this.height, this.width);
     }
   }
 }
