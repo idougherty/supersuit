@@ -51,11 +51,9 @@ class Player {
       DOWN: false
     };
   }
-  //owo
+
   draw() {
     c.drawImage(this.texture, this.x, this.y, this.width, this.height);
-    //c.fillStyle = "white";
-    //c.fillRect(this.x, this.y, this.width, this.height);
   }
 
   respawn() {
@@ -182,7 +180,7 @@ class Player {
     }
     this.texture = playerRightWalking;
   }
-  //iwi
+
   up() {
     if (this.vy > -this.maxSpeed) {
       this.vy -= 1;
@@ -200,7 +198,6 @@ class Player {
     }
     this.texture = playerFrontWalking;
   }
-  //uwu
 
   punch() {
     removeIf(game.enemies, enemy => {
@@ -299,7 +296,7 @@ document.addEventListener("keyup", function(e) {
     default:
   }
 });
-//owo
+
 let cursorX = 0;
 let cursorY = 0;
 
@@ -322,7 +319,7 @@ function calculateCursorCoords() {
 
 let mouseX = 0;
 let mouseY = 0;
-//WwW
+
 canvas.addEventListener("mousemove", event => {
   mouseX = event.offsetX;
   mouseY = event.offsetY;
@@ -447,7 +444,7 @@ class Gamestate {
     setTimeout(game.loop, game.speed);
   }
 }
-//uwu
+
 const game = new Gamestate();
 const player = new Player();
 
