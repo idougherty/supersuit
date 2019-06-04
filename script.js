@@ -24,7 +24,7 @@ c.imageSmoothingEnabled = false;
 
 let win = false;
 
-const PUNCH_COOL_DOWN = 100;
+const PUNCH_COOL_DOWN = 50;
 
 const playerFront = loadImage("art/frozoefront.png");
 const playerFrontWalking = loadImage("art/frozonefronttwalk.gif");
