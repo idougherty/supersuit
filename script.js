@@ -24,6 +24,8 @@ c.imageSmoothingEnabled = false;
 
 let win = false;
 
+const PUNCH_COOL_DOWN = 100;
+
 const playerFront = loadImage("art/frozoefront.png");
 const playerFrontWalking = loadImage("art/frozonefronttwalk.gif");
 const playerBack = loadImage("art/frozoneback.png");
@@ -41,7 +43,7 @@ class Player {
     this.radius = 16;
     this.weapon = "fist";
     this.maxSpeed = 4;
-    this.punchCoolDown = 0;
+    this.punchCoolDown = PUNCH_COOL_DOWN;
     this.texture = playerFront;
 
     this.keydown = {
@@ -233,7 +235,7 @@ export function calculateVector(x1, y1, x2, y2) {
 
 canvas.addEventListener("click", function(e) {
   if (player.weapon === "fist") {
-    if (player.punchCoolDown > 20) {
+    if (player.punchCoolDown > PUNCH_COOL_DOWN) {
       player.punch();
       player.punchCoolDown = 0;
     }
@@ -332,7 +334,7 @@ const gun = loadImage("art/itsthegun.png");
 function drawCursor(c) {
   if (player.weapon === "fist") {
     c.drawImage(fist, cursorX - 6, cursorY - 6, 12, 12);
-    if (player.punchCoolDown < 20) {
+    if (player.punchCoolDown < PUNCH_COOL_DOWN) {
       c.fillStyle = "rgba(0, 0, 0, .5)";
       c.fillRect(cursorX - 6, cursorY - 6, 12, 12);
     }
