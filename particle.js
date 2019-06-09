@@ -16,7 +16,7 @@ export class Particle {
     c.fillStyle = this.color;
     c.fillRect(this.x, this.y, this.size, this.size);
   }
-  update(_player, game) {
+  update(game) {
     this.vx = Math.random() * 4 - 2;
     this.vy = Math.random() + 2;
     this.size -= Math.random() / 5;

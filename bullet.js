@@ -19,7 +19,7 @@ export class Bullet {
     this.tag = tag;
   }
 
-  update(player, game) {
+  update(game) {
     this.x += this.vector[0] * this.speed;
     this.y += this.vector[1] * this.speed;
     for (const obstacle of game.obstacles) {
@@ -33,8 +33,8 @@ export class Bullet {
     }
 
     if (this.tag == "enemy") {
-      if (isCollidingCircleEntities(this, player)) {
-        player.respawn();
+      if (isCollidingCircleEntities(this, game.player)) {
+        game.player.respawn();
       }
     }
     if (this.tag == "player") {

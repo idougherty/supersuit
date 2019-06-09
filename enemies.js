@@ -19,7 +19,7 @@ export class Enemy {
     this.texture = null;
   }
 
-  update(_player, _game) {}
+  update(_game) {}
 
   kill(game) {
     const [centerX, centerY] = entityCenter(this);
@@ -73,11 +73,13 @@ export class Crachead extends Enemy {
     this.texture = cracheadTexture;
   }
 
-  update(player, game) {
-    var dist = Math.sqrt((player.x - this.x) ** 2 + (player.y - this.y) ** 2);
+  update(game) {
+    var dist = Math.sqrt(
+      (game.player.x - this.x) ** 2 + (game.player.y - this.y) ** 2
+    );
     var direction_vector = [
-      (player.x - this.x) / dist,
-      (player.y - this.y) / dist
+      (game.player.x - this.x) / dist,
+      (game.player.y - this.y) / dist
     ];
 
     this.x += direction_vector[0] * 4;
@@ -98,8 +100,8 @@ export class Crachead extends Enemy {
       }
     }
 
-    if (isCollidingCircleEntities(this, player)) {
-      player.respawn();
+    if (isCollidingCircleEntities(this, game.player)) {
+      game.player.respawn();
     }
   }
 }
@@ -121,12 +123,14 @@ export class GuyThatShootsYou extends Enemy {
     super.kill(game);
   }
 
-  update(player, game) {
+  update(game) {
     this.reload -= 1;
-    var dist = Math.sqrt((player.x - this.x) ** 2 + (player.y - this.y) ** 2);
+    var dist = Math.sqrt(
+      (game.player.x - this.x) ** 2 + (game.player.y - this.y) ** 2
+    );
     var direction_vector = [
-      (player.x - this.x) / dist,
-      (player.y - this.y) / dist
+      (game.player.x - this.x) / dist,
+      (game.player.y - this.y) / dist
     ];
     if (this.reload <= 0) {
       game.bullets.push(

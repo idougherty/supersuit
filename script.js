@@ -87,7 +87,7 @@ class Player {
         if (game.enemies.length === 0) {
           obs.open = true;
         }
-        if (obs.open && isCollidingRectEntities(player, obs)) {
+        if (obs.open && isCollidingRectEntities(this, obs)) {
           game.currentLevel++;
           if (game.currentLevel > game.levels.length - 1) {
             win = true;
@@ -146,7 +146,7 @@ class Player {
     this.x += this.vx;
 
     for (const obs of game.obstacles) {
-      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(player, obs)) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(this, obs)) {
         this.x -= this.vx;
         this.vx = 0;
       }
@@ -155,7 +155,7 @@ class Player {
     this.y += this.vy;
 
     for (const obs of game.obstacles) {
-      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(player, obs)) {
+      if (!(obs instanceof Trapdoor) && isCollidingRectEntities(this, obs)) {
         this.y -= this.vy;
         this.vy = 0;
       }
@@ -234,15 +234,15 @@ export function calculateVector(x1, y1, x2, y2) {
 }
 
 canvas.addEventListener("click", function(e) {
-  if (player.weapon === "fist") {
-    if (player.punchCoolDown > PUNCH_COOL_DOWN) {
-      player.punch();
-      player.punchCoolDown = 0;
+  if (game.player.weapon === "fist") {
+    if (game.player.punchCoolDown > PUNCH_COOL_DOWN) {
+      game.player.punch();
+      game.player.punchCoolDown = 0;
     }
   } else {
-    const [playerX, playerY] = entityCenter(player);
+    const [playerX, playerY] = entityCenter(game.player);
     const vector = calculateVector(playerX, playerY, e.offsetX, e.offsetY);
-    player.shoot(vector);
+    game.player.shoot(vector);
   }
 });
 
@@ -250,22 +250,22 @@ document.addEventListener("keydown", function(e) {
   switch (e.code) {
     case "KeyA":
     case "ArrowLeft":
-      player.keydown.LEFT = true;
+      game.player.keydown.LEFT = true;
       break;
 
     case "KeyW":
     case "ArrowUp":
-      player.keydown.UP = true;
+      game.player.keydown.UP = true;
       break;
 
     case "KeyD":
     case "ArrowRight":
-      player.keydown.RIGHT = true;
+      game.player.keydown.RIGHT = true;
       break;
 
     case "KeyS":
     case "ArrowDown":
-      player.keydown.DOWN = true;
+      game.player.keydown.DOWN = true;
       break;
 
     default:
@@ -277,22 +277,22 @@ document.addEventListener("keyup", function(e) {
   switch (e.code) {
     case "KeyA":
     case "ArrowLeft":
-      player.keydown.LEFT = false;
+      game.player.keydown.LEFT = false;
       break;
 
     case "KeyW":
     case "ArrowUp":
-      player.keydown.UP = false;
+      game.player.keydown.UP = false;
       break;
 
     case "KeyD":
     case "ArrowRight":
-      player.keydown.RIGHT = false;
+      game.player.keydown.RIGHT = false;
       break;
 
     case "KeyS":
     case "ArrowDown":
-      player.keydown.DOWN = false;
+      game.player.keydown.DOWN = false;
       break;
 
     default:
@@ -303,8 +303,8 @@ let cursorX = 0;
 let cursorY = 0;
 
 function calculateCursorCoords() {
-  if (player.weapon === "fist") {
-    const [playerX, playerY] = entityCenter(player);
+  if (game.player.weapon === "fist") {
+    const [playerX, playerY] = entityCenter(game.player);
     const xDist = mouseX - playerX;
     const yDist = mouseY - playerY;
     const distance = Math.sqrt(xDist ** 2 + yDist ** 2);
@@ -332,9 +332,9 @@ const fist = loadImage("art/itsafist.png");
 const gun = loadImage("art/itsthegun.png");
 /** @param {CanvasRenderingContext2D} c */
 function drawCursor(c) {
-  if (player.weapon === "fist") {
+  if (game.player.weapon === "fist") {
     c.drawImage(fist, cursorX - 6, cursorY - 6, 12, 12);
-    if (player.punchCoolDown < PUNCH_COOL_DOWN) {
+    if (game.player.punchCoolDown < PUNCH_COOL_DOWN) {
       c.fillStyle = "rgba(0, 0, 0, .5)";
       c.fillRect(cursorX - 6, cursorY - 6, 12, 12);
     }
@@ -351,10 +351,14 @@ function draw() {
     return;
   }
 
-  player.update();
+  game.player.update();
 
-  game.speed =
-    120 / (Math.sqrt(player.vx * player.vx + player.vy * player.vy) + 0.5);
+  const prespeed =
+    Math.sqrt(
+      game.player.vx * game.player.vx + game.player.vy * game.player.vy
+    ) + 0.5;
+
+  game.speed = 120 / prespeed;
 
   c.fillStyle = `rgba(0, 0, 0, ${(1 / game.speed) * 15})`;
   c.fillRect(0, 0, canvas.width, canvas.height);
@@ -369,9 +373,9 @@ function draw() {
     entity.draw(c);
   }
 
-  player.draw(c);
+  game.player.draw(c);
 
-  if (player.weapon === "fist") {
+  if (game.player.weapon === "fist") {
     c.beginPath();
     c.fillStyle = "darkred";
     c.arc(mouseX, mouseY, 5, 0, 2 * Math.PI);
@@ -385,6 +389,7 @@ function draw() {
 
 class Gamestate {
   constructor() {
+    this.player = new Player();
     this.speed = 1;
     this.currentLevel = 0;
     this.enemies = [];
@@ -428,7 +433,7 @@ class Gamestate {
       ...this.bullets,
       ...this.particles
     ]) {
-      if (entity.update) entity.update(player, game);
+      if (entity.update) entity.update(game);
     }
   }
   loop() {
@@ -439,10 +444,8 @@ class Gamestate {
 }
 
 const game = new Gamestate();
-const player = new Player();
 
 window.game = game;
-window.player = player;
 
 game.weapons.push(new Weapon(64, 64, true));
 
@@ -577,5 +580,5 @@ async function startGame() {
   await Promise.all(images);
   requestAnimationFrame(draw);
   game.loop();
-  player.respawn();
+  game.player.respawn();
 }
