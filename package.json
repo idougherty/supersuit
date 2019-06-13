@@ -1,4 +1,6 @@
 {
+  "name": "supersuit",
+  "version": "1.0.0",
   "scripts": {
     "watch": "parcel index.html",
     "build": "parcel build index.html",
