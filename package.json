@@ -1,17 +1,17 @@
 {
-  "name": "supersuit",
-  "version": "1.0.0",
-  "scripts": {
-    "watch": "parcel src/index.html",
-    "build": "parcel build src/index.html",
-    "deploy": "parcel build src/index.html && gh-pages -d dist"
-  },
-  "devDependencies": {
-    "gh-pages": "^2.0.1",
-    "parcel": "^1.12.3"
-  },
-  "browserslist": [
-    "Chrome 71",
-    "Firefox 67"
-  ]
+	"name": "supersuit",
+	"version": "1.0.0",
+	"scripts": {
+		"watch": "parcel src/index.html",
+		"build": "parcel build src/index.html --public-url ./",
+		"deploy": "parcel build src/index.html --public-url ./ && gh-pages -d dist"
+	},
+	"devDependencies": {
+		"gh-pages": "^2.0.1",
+		"parcel": "^1.12.3"
+	},
+	"browserslist": [
+		"Chrome 71",
+		"Firefox 67"
+	]
 }
