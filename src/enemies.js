@@ -65,7 +65,7 @@ export class Enemy {
   }
 }
 
-const cracheadTexture = loadImage(require("./art/crackhead.png"));
+const cracheadTexture = loadImage(require("../art/crackhead.png"));
 
 export class Crachead extends Enemy {
   constructor(x, y) {
@@ -106,7 +106,7 @@ export class Crachead extends Enemy {
   }
 }
 
-const gunguyTexture = loadImage(require("./art/gunguy.png"));
+const gunguyTexture = loadImage(require("../art/gunguy.png"));
 
 export class GuyThatShootsYou extends Enemy {
   constructor(x, y) {

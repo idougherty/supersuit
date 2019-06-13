@@ -2,9 +2,9 @@
   "name": "supersuit",
   "version": "1.0.0",
   "scripts": {
-    "watch": "parcel index.html",
-    "build": "parcel build index.html",
-    "deploy": "parcel build index.html && gh-pages -d dist"
+    "watch": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "deploy": "parcel build src/index.html && gh-pages -d dist"
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",
