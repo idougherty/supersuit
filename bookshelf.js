@@ -1,7 +1,7 @@
 import { TILE_SIZE } from "./constants.js";
 import { loadImage } from "./img.js";
 
-const bookshelfTexture = loadImage("art/bookshelf.png");
+const bookshelfTexture = loadImage(require("./art/bookshelf.png"));
 
 export class Bookshelf {
   constructor(x, y) {

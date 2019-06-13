@@ -1,7 +1,7 @@
 import { TILE_SIZE } from "./constants.js";
 import { loadImage } from "./img.js";
 
-const barrelTexture = loadImage("art/barrel.png");
+const barrelTexture = loadImage(require("./art/barrel.png"));
 
 export class FireBarrel {
   constructor(x, y) {

@@ -1,8 +1,8 @@
 import { TILE_SIZE } from "./constants.js";
 import { loadImage } from "./img.js";
 
-const openTexture = loadImage("art/trapdooropen.png");
-const closedTexture = loadImage("art/trapdoorclosed.png");
+const openTexture = loadImage(require("./art/trapdooropen.png"));
+const closedTexture = loadImage(require("./art/trapdoorclosed.png"));
 
 export class Trapdoor {
   constructor(x, y) {

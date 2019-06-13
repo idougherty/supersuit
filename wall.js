@@ -1,7 +1,7 @@
 import { TILE_SIZE } from "./constants.js";
 import { loadImage } from "./img.js";
 
-const wallTexture = loadImage("art/wall.png");
+const wallTexture = loadImage(require("./art/wall.png"));
 
 export class Wall {
   constructor(x, y) {

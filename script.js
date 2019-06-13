@@ -26,11 +26,11 @@ let win = false;
 
 const PUNCH_COOL_DOWN = 50;
 
-const playerFront = loadImage("art/frozoefront.png");
-const playerFrontWalking = loadImage("art/frozonefronttwalk.gif");
-const playerBack = loadImage("art/frozoneback.png");
-const playerRightWalking = loadImage("art/frorightwalk.gif");
-const playerLeftWalking = loadImage("art/froleftwalk.gif");
+const playerFront = loadImage(require("./art/frozoefront.png"));
+const playerFrontWalking = loadImage(require("./art/frozonefronttwalk.gif"));
+const playerBack = loadImage(require("./art/frozoneback.png"));
+const playerRightWalking = loadImage(require("./art/frorightwalk.gif"));
+const playerLeftWalking = loadImage(require("./art/froleftwalk.gif"));
 
 class Player {
   constructor() {
@@ -328,8 +328,8 @@ canvas.addEventListener("mousemove", event => {
   calculateCursorCoords();
 });
 
-const fist = loadImage("art/itsafist.png");
-const gun = loadImage("art/itsthegun.png");
+const fist = loadImage(require("./art/itsafist.png"));
+const gun = loadImage(require("./art/itsthegun.png"));
 /** @param {CanvasRenderingContext2D} c */
 function drawCursor(c) {
   if (game.player.weapon === "fist") {
@@ -343,7 +343,7 @@ function drawCursor(c) {
   }
 }
 
-const endscreenImage = loadImage("art/endscreen.jpg");
+const endscreenImage = loadImage(require("./art/endscreen.jpg"));
 
 function draw() {
   if (win) {
@@ -554,8 +554,8 @@ game.weapons.push(new Weapon(64, 64, true));
   );
 }
 
-const titleImage = loadImageNow("art/title.jpg");
-const explainImage = loadImageNow("art/explain.jpg");
+const titleImage = loadImageNow(require("./art/title.jpg"));
+const explainImage = loadImageNow(require("./art/explain.jpg"));
 
 titleImage.then(titleImgLoaded => {
   let startImage = "title";

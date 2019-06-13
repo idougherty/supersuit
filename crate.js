@@ -1,7 +1,7 @@
 import { TILE_SIZE } from "./constants.js";
 import { loadImage } from "./img.js";
 
-const crateTexture = loadImage("art/crate.png");
+const crateTexture = loadImage(require("./art/crate.png"));
 
 export class Crate {
   constructor(x, y) {

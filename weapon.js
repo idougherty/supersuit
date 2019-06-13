@@ -1,6 +1,6 @@
 import { loadImage } from "./img.js";
 
-const gunTexture = loadImage("art/itsthegun.png");
+const gunTexture = loadImage(require("./art/itsthegun.png"));
 
 export class Weapon {
   constructor(x, y, loaded, weapon = "gun") {
